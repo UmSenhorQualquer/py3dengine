@@ -1,0 +1,2082 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>py3DEngine.thirdparty.transformations</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="py3DEngine-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >python 3D Engine</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="py3DEngine-module.html">Package&nbsp;py3DEngine</a> ::
+        <a href="py3DEngine.thirdparty-module.html">Package&nbsp;thirdparty</a> ::
+        Module&nbsp;transformations
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="py3DEngine.thirdparty.transformations-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module transformations</h1><p class="nomargin-top"></p>
+<p>Homogeneous Transformation Matrices and Quaternions.</p>
+<p>A library for calculating 4x4 matrices for translating, rotating, reflecting,
+scaling, shearing, projecting, orthogonalizing, and superimposing arrays of
+3D homogeneous coordinates as well as for converting between rotation matrices,
+Euler angles, and quaternions. Also includes an Arcball control object and
+functions to decompose transformation matrices.</p>
+<div class="rst-section" id="rst-requirements">
+<h1 class="heading">Requirements</h1>
+<ul class="rst-simple">
+<li><a class="rst-reference external" href="http://www.python.org" target="_top">CPython 2.7 or 3.3</a></li>
+<li><a class="rst-reference external" href="http://www.numpy.org" target="_top">Numpy 1.7</a></li>
+<li><a class="rst-reference external" href="http://www.lfd.uci.edu/~gohlke/" target="_top">Transformations.c 2013.01.18</a>
+(recommended for speedup of some functions)</li>
+</ul>
+</div>
+<div class="rst-section" id="rst-notes">
+<h1 class="heading">Notes</h1>
+<p>The API is not stable yet and is expected to change between revisions.</p>
+<p>This Python code is not optimized for speed. Refer to the transformations.c
+module for a faster implementation of some functions.</p>
+<p>Documentation in HTML format can be generated with epydoc.</p>
+<p>Matrices (M) can be inverted using numpy.linalg.inv(M), be concatenated using
+numpy.dot(M0, M1), or transform homogeneous coordinate arrays (v) using
+numpy.dot(M, v) for shape (4, *) column vectors, respectively
+numpy.dot(v, M.T) for shape (*, 4) row vectors (&quot;array of points&quot;).</p>
+<p>This module follows the &quot;column vectors on the right&quot; and &quot;row major storage&quot;
+(C contiguous) conventions. The translation components are in the right column
+of the transformation matrix, i.e. M[:3, 3].
+The transpose of the transformation matrices may have to be used to interface
+with other graphics systems, e.g. with OpenGL's glMultMatrixd(). See also [16].</p>
+<p>Calculations are carried out with numpy.float64 precision.</p>
+<p>Vector, point, quaternion, and matrix function arguments are expected to be
+&quot;array like&quot;, i.e. tuple, list, or numpy arrays.</p>
+<p>Return types are numpy arrays unless specified otherwise.</p>
+<p>Angles are in radians unless specified otherwise.</p>
+<p>Quaternions w+ix+jy+kz are represented as [w, x, y, z].</p>
+<p>A triple of Euler angles can be applied/interpreted in 24 ways, which can
+be specified using a 4 character string or encoded 4-tuple:</p>
+<blockquote>
+<p><em>Axes 4-string</em>: e.g. 'sxyz' or 'ryxy'</p>
+<ul class="rst-simple">
+<li>first character : rotations are applied to 's'tatic or 'r'otating frame</li>
+<li>remaining characters : successive rotation axis 'x', 'y', or 'z'</li>
+</ul>
+<p><em>Axes 4-tuple</em>: e.g. (0, 0, 0, 0) or (1, 1, 1, 1)</p>
+<ul class="rst-simple">
+<li>inner axis: code of axis ('x':0, 'y':1, 'z':2) of rightmost matrix.</li>
+<li>parity : even (0) if inner axis 'x' is followed by 'y', 'y' is followed
+by 'z', or 'z' is followed by 'x'. Otherwise odd (1).</li>
+<li>repetition : first and last axis are same (1) or different (0).</li>
+<li>frame : rotations are applied to static (0) or rotating (1) frame.</li>
+</ul>
+</blockquote>
+</div>
+<div class="rst-section" id="rst-references">
+<h1 class="heading">References</h1>
+<ol class="rst-arabic simple">
+<li>Matrices and transformations. Ronald Goldman.
+In &quot;Graphics Gems I&quot;, pp 472-475. Morgan Kaufmann, 1990.</li>
+<li>More matrices and transformations: shear and pseudo-perspective.
+Ronald Goldman. In &quot;Graphics Gems II&quot;, pp 320-323. Morgan Kaufmann, 1991.</li>
+<li>Decomposing a matrix into simple transformations. Spencer Thomas.
+In &quot;Graphics Gems II&quot;, pp 320-323. Morgan Kaufmann, 1991.</li>
+<li>Recovering the data from the transformation matrix. Ronald Goldman.
+In &quot;Graphics Gems II&quot;, pp 324-331. Morgan Kaufmann, 1991.</li>
+<li>Euler angle conversion. Ken Shoemake.
+In &quot;Graphics Gems IV&quot;, pp 222-229. Morgan Kaufmann, 1994.</li>
+<li>Arcball rotation control. Ken Shoemake.
+In &quot;Graphics Gems IV&quot;, pp 175-192. Morgan Kaufmann, 1994.</li>
+<li>Representing attitude: Euler angles, unit quaternions, and rotation
+vectors. James Diebel. 2006.</li>
+<li>A discussion of the solution for the best rotation to relate two sets
+of vectors. W Kabsch. Acta Cryst. 1978. A34, 827-828.</li>
+<li>Closed-form solution of absolute orientation using unit quaternions.
+BKP Horn. J Opt Soc Am A. 1987. 4(4):629-642.</li>
+<li>Quaternions. Ken Shoemake.
+<a class="rst-reference external" href="http://www.sfu.ca/~jwa3/cmpt461/files/quatut.pdf" target="_top">http://www.sfu.ca/~jwa3/cmpt461/files/quatut.pdf</a></li>
+<li>From quaternion to matrix and back. JMP van Waveren. 2005.
+<a class="rst-reference external" href="http://www.intel.com/cd/ids/developer/asmo-na/eng/293748.htm" target="_top">http://www.intel.com/cd/ids/developer/asmo-na/eng/293748.htm</a></li>
+<li>Uniform random rotations. Ken Shoemake.
+In &quot;Graphics Gems III&quot;, pp 124-132. Morgan Kaufmann, 1992.</li>
+<li>Quaternion in molecular modeling. CFF Karney.
+J Mol Graph Mod, 25(5):595-604</li>
+<li>New method for extracting the quaternion from a rotation matrix.
+Itzhack Y Bar-Itzhack, J Guid Contr Dynam. 2000. 23(6): 1085-1087.</li>
+<li>Multiple View Geometry in Computer Vision. Hartley and Zissermann.
+Cambridge University Press; 2nd Ed. 2004. Chapter 4, Algorithm 4.7, p 130.</li>
+<li>Column Vectors vs. Row Vectors.
+<a class="rst-reference external" href="http://steve.hollasch.net/cgindex/math/matrix/column-vec.html" target="_top">http://steve.hollasch.net/cgindex/math/matrix/column-vec.html</a></li>
+</ol>
+</div>
+<div class="rst-section" id="rst-examples">
+<h1 class="heading">Examples</h1>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>alpha, beta, gamma = 0.123, -1.234, 2.345
+<span class="py-prompt">&gt;&gt;&gt; </span>origin, xaxis, yaxis, zaxis = [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]
+<span class="py-prompt">&gt;&gt;&gt; </span>I = identity_matrix()
+<span class="py-prompt">&gt;&gt;&gt; </span>Rx = rotation_matrix(alpha, xaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>Ry = rotation_matrix(beta, yaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>Rz = rotation_matrix(gamma, zaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>R = concatenate_matrices(Rx, Ry, Rz)
+<span class="py-prompt">&gt;&gt;&gt; </span>euler = euler_from_matrix(R, <span class="py-string">'rxyz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose([alpha, beta, gamma], euler)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>Re = euler_matrix(alpha, beta, gamma, <span class="py-string">'rxyz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(R, Re)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>al, be, ga = euler_from_matrix(Re, <span class="py-string">'rxyz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(Re, euler_matrix(al, be, ga, <span class="py-string">'rxyz'</span>))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>qx = quaternion_about_axis(alpha, xaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>qy = quaternion_about_axis(beta, yaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>qz = quaternion_about_axis(gamma, zaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_multiply(qx, qy)
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_multiply(q, qz)
+<span class="py-prompt">&gt;&gt;&gt; </span>Rq = quaternion_matrix(q)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(R, Rq)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(1.23, origin)
+<span class="py-prompt">&gt;&gt;&gt; </span>T = translation_matrix([1, 2, 3])
+<span class="py-prompt">&gt;&gt;&gt; </span>Z = shear_matrix(beta, xaxis, origin, zaxis)
+<span class="py-prompt">&gt;&gt;&gt; </span>R = random_rotation_matrix(numpy.random.rand(3))
+<span class="py-prompt">&gt;&gt;&gt; </span>M = concatenate_matrices(T, R, Z, S)
+<span class="py-prompt">&gt;&gt;&gt; </span>scale, shear, angles, trans, persp = decompose_matrix(M)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(scale, 1.23)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(trans, [1, 2, 3])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(shear, [0, math.tan(beta), 0])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(R, euler_matrix(axes=<span class="py-string">'sxyz'</span>, *angles))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>M1 = compose_matrix(scale, shear, angles, trans, persp)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(M, M1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v0, v1 = random_vector(3), random_vector(3)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = rotation_matrix(angle_between_vectors(v0, v1), vector_product(v0, v1))
+<span class="py-prompt">&gt;&gt;&gt; </span>v2 = numpy.dot(v0, M[:3,:3].T)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(unit_vector(v1), unit_vector(v2))
+<span class="py-output">True</span></pre>
+</div>
+
+<hr />
+<div class="fields">      <p><strong>Author:</strong>
+        <a class="rst-reference external" href="http://www.lfd.uci.edu/~gohlke/" target="_top">Christoph Gohlke</a>
+      </p>
+      <p><strong>Organization:</strong>
+        Laboratory for Fluorescence Dynamics, University of California, Irvine
+      </p>
+      <p><strong>Version:</strong>
+        2013.06.29
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="py3DEngine.thirdparty.transformations.Arcball-class.html" class="summary-name" onclick="show_private();">Arcball</a><br />
+      Virtual Trackball Control.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="identity_matrix"></a><span class="summary-sig-name">identity_matrix</span>()</span><br />
+      Return 4x4 identity/unit matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="translation_matrix"></a><span class="summary-sig-name">translation_matrix</span>(<span class="summary-sig-arg">direction</span>)</span><br />
+      Return matrix to translate by direction vector.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="translation_from_matrix"></a><span class="summary-sig-name">translation_from_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return translation vector from translation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="reflection_matrix"></a><span class="summary-sig-name">reflection_matrix</span>(<span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">normal</span>)</span><br />
+      Return matrix to mirror at plane defined by point and normal vector.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="reflection_from_matrix"></a><span class="summary-sig-name">reflection_from_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return mirror plane point and normal vector from reflection matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="rotation_matrix"></a><span class="summary-sig-name">rotation_matrix</span>(<span class="summary-sig-arg">angle</span>,
+        <span class="summary-sig-arg">direction</span>,
+        <span class="summary-sig-arg">point</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return matrix to rotate about axis defined by point and direction.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="rotation_from_matrix"></a><span class="summary-sig-name">rotation_from_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return rotation angle and axis from rotation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#scale_matrix" class="summary-sig-name" onclick="show_private();">scale_matrix</a>(<span class="summary-sig-arg">factor</span>,
+        <span class="summary-sig-arg">origin</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">direction</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return matrix to scale by factor around origin in direction.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="scale_from_matrix"></a><span class="summary-sig-name">scale_from_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return scaling factor, origin and direction from scaling matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#projection_matrix" class="summary-sig-name" onclick="show_private();">projection_matrix</a>(<span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">normal</span>,
+        <span class="summary-sig-arg">direction</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">perspective</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">pseudo</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return matrix to project onto plane defined by point and normal.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#projection_from_matrix" class="summary-sig-name" onclick="show_private();">projection_from_matrix</a>(<span class="summary-sig-arg">matrix</span>,
+        <span class="summary-sig-arg">pseudo</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return projection plane and perspective point from projection matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#clip_matrix" class="summary-sig-name" onclick="show_private();">clip_matrix</a>(<span class="summary-sig-arg">left</span>,
+        <span class="summary-sig-arg">right</span>,
+        <span class="summary-sig-arg">bottom</span>,
+        <span class="summary-sig-arg">top</span>,
+        <span class="summary-sig-arg">near</span>,
+        <span class="summary-sig-arg">far</span>,
+        <span class="summary-sig-arg">perspective</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return matrix to obtain normalized device coordinates from frustum.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#shear_matrix" class="summary-sig-name" onclick="show_private();">shear_matrix</a>(<span class="summary-sig-arg">angle</span>,
+        <span class="summary-sig-arg">direction</span>,
+        <span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">normal</span>)</span><br />
+      Return matrix to shear by angle along direction vector on shear plane.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="shear_from_matrix"></a><span class="summary-sig-name">shear_from_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return shear angle, direction and plane from shear matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#decompose_matrix" class="summary-sig-name" onclick="show_private();">decompose_matrix</a>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return sequence of transformations from transformation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#compose_matrix" class="summary-sig-name" onclick="show_private();">compose_matrix</a>(<span class="summary-sig-arg">scale</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">shear</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">angles</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">translate</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">perspective</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return transformation matrix from sequence of transformations.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#orthogonalization_matrix" class="summary-sig-name" onclick="show_private();">orthogonalization_matrix</a>(<span class="summary-sig-arg">lengths</span>,
+        <span class="summary-sig-arg">angles</span>)</span><br />
+      Return orthogonalization matrix for crystallographic cell coordinates.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#affine_matrix_from_points" class="summary-sig-name" onclick="show_private();">affine_matrix_from_points</a>(<span class="summary-sig-arg">v0</span>,
+        <span class="summary-sig-arg">v1</span>,
+        <span class="summary-sig-arg">shear</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">scale</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">usesvd</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Return affine transform matrix to register two point sets.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#superimposition_matrix" class="summary-sig-name" onclick="show_private();">superimposition_matrix</a>(<span class="summary-sig-arg">v0</span>,
+        <span class="summary-sig-arg">v1</span>,
+        <span class="summary-sig-arg">scale</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">usesvd</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Return matrix to transform given 3D point set into second point set.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#euler_matrix" class="summary-sig-name" onclick="show_private();">euler_matrix</a>(<span class="summary-sig-arg">ai</span>,
+        <span class="summary-sig-arg">aj</span>,
+        <span class="summary-sig-arg">ak</span>,
+        <span class="summary-sig-arg">axes</span>=<span class="summary-sig-default">'sxyz'</span>)</span><br />
+      Return homogeneous rotation matrix from Euler angles and axis sequence.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#euler_from_matrix" class="summary-sig-name" onclick="show_private();">euler_from_matrix</a>(<span class="summary-sig-arg">matrix</span>,
+        <span class="summary-sig-arg">axes</span>=<span class="summary-sig-default">'sxyz'</span>)</span><br />
+      Return Euler angles from rotation matrix for specified axis sequence.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="euler_from_quaternion"></a><span class="summary-sig-name">euler_from_quaternion</span>(<span class="summary-sig-arg">quaternion</span>,
+        <span class="summary-sig-arg">axes</span>=<span class="summary-sig-default">'sxyz'</span>)</span><br />
+      Return Euler angles from quaternion for specified axis sequence.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#quaternion_from_euler" class="summary-sig-name" onclick="show_private();">quaternion_from_euler</a>(<span class="summary-sig-arg">ai</span>,
+        <span class="summary-sig-arg">aj</span>,
+        <span class="summary-sig-arg">ak</span>,
+        <span class="summary-sig-arg">axes</span>=<span class="summary-sig-default">'sxyz'</span>)</span><br />
+      Return quaternion from Euler angles and axis sequence.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_about_axis"></a><span class="summary-sig-name">quaternion_about_axis</span>(<span class="summary-sig-arg">angle</span>,
+        <span class="summary-sig-arg">axis</span>)</span><br />
+      Return quaternion for rotation about axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_matrix"></a><span class="summary-sig-name">quaternion_matrix</span>(<span class="summary-sig-arg">quaternion</span>)</span><br />
+      Return homogeneous rotation matrix from quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#quaternion_from_matrix" class="summary-sig-name" onclick="show_private();">quaternion_from_matrix</a>(<span class="summary-sig-arg">matrix</span>,
+        <span class="summary-sig-arg">isprecise</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Return quaternion from rotation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_multiply"></a><span class="summary-sig-name">quaternion_multiply</span>(<span class="summary-sig-arg">quaternion1</span>,
+        <span class="summary-sig-arg">quaternion0</span>)</span><br />
+      Return multiplication of two quaternions.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_conjugate"></a><span class="summary-sig-name">quaternion_conjugate</span>(<span class="summary-sig-arg">quaternion</span>)</span><br />
+      Return conjugate of quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_inverse"></a><span class="summary-sig-name">quaternion_inverse</span>(<span class="summary-sig-arg">quaternion</span>)</span><br />
+      Return inverse of quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_real"></a><span class="summary-sig-name">quaternion_real</span>(<span class="summary-sig-arg">quaternion</span>)</span><br />
+      Return real part of quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_imag"></a><span class="summary-sig-name">quaternion_imag</span>(<span class="summary-sig-arg">quaternion</span>)</span><br />
+      Return imaginary part of quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="quaternion_slerp"></a><span class="summary-sig-name">quaternion_slerp</span>(<span class="summary-sig-arg">quat0</span>,
+        <span class="summary-sig-arg">quat1</span>,
+        <span class="summary-sig-arg">fraction</span>,
+        <span class="summary-sig-arg">spin</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">shortestpath</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Return spherical linear interpolation between two quaternions.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#random_quaternion" class="summary-sig-name" onclick="show_private();">random_quaternion</a>(<span class="summary-sig-arg">rand</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return uniform random unit quaternion.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#random_rotation_matrix" class="summary-sig-name" onclick="show_private();">random_rotation_matrix</a>(<span class="summary-sig-arg">rand</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return uniform random rotation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="arcball_map_to_sphere"></a><span class="summary-sig-name">arcball_map_to_sphere</span>(<span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">center</span>,
+        <span class="summary-sig-arg">radius</span>)</span><br />
+      Return unit sphere coordinates from window coordinates.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="arcball_constrain_to_axis"></a><span class="summary-sig-name">arcball_constrain_to_axis</span>(<span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">axis</span>)</span><br />
+      Return sphere point perpendicular to axis.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="arcball_nearest_axis"></a><span class="summary-sig-name">arcball_nearest_axis</span>(<span class="summary-sig-arg">point</span>,
+        <span class="summary-sig-arg">axes</span>)</span><br />
+      Return axis, which arc is nearest to point.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#vector_norm" class="summary-sig-name" onclick="show_private();">vector_norm</a>(<span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return length, i.e.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#unit_vector" class="summary-sig-name" onclick="show_private();">unit_vector</a>(<span class="summary-sig-arg">data</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return ndarray normalized by length, i.e.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="random_vector"></a><span class="summary-sig-name">random_vector</span>(<span class="summary-sig-arg">size</span>)</span><br />
+      Return array of random doubles in the half-open interval [0.0, 1.0).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="vector_product"></a><span class="summary-sig-name">vector_product</span>(<span class="summary-sig-arg">v0</span>,
+        <span class="summary-sig-arg">v1</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Return vector perpendicular to vectors.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#angle_between_vectors" class="summary-sig-name" onclick="show_private();">angle_between_vectors</a>(<span class="summary-sig-arg">v0</span>,
+        <span class="summary-sig-arg">v1</span>,
+        <span class="summary-sig-arg">directed</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">axis</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Return angle between vectors.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="inverse_matrix"></a><span class="summary-sig-name">inverse_matrix</span>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Return inverse of square transformation matrix.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="concatenate_matrices"></a><span class="summary-sig-name">concatenate_matrices</span>(<span class="summary-sig-arg">*matrices</span>)</span><br />
+      Return concatenation of series of transformation matrices.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="is_same_transform"></a><span class="summary-sig-name">is_same_transform</span>(<span class="summary-sig-arg">matrix0</span>,
+        <span class="summary-sig-arg">matrix1</span>)</span><br />
+      Return True if two matrices perform same transformation.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="py3DEngine.thirdparty.transformations-module.html#_import_module" class="summary-sig-name" onclick="show_private();">_import_module</a>(<span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">package</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">warn</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">prefix</span>=<span class="summary-sig-default">'_py_'</span>,
+        <span class="summary-sig-arg">ignore</span>=<span class="summary-sig-default">'_'</span>)</span><br />
+      Try import all public attributes from module into global namespace.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__version__"></a><span class="summary-name">__version__</span> = <code title="'2013.06.29'">'2013.06.29'</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_EPS"></a><span class="summary-name">_EPS</span> = <code title="numpy.finfo(float).eps* 4.0">numpy.finfo(float).eps* 4.0</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_NEXT_AXIS"></a><span class="summary-name">_NEXT_AXIS</span> = <code title="[1, 2, 0, 1]">[1, 2, 0, 1]</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="py3DEngine.thirdparty.transformations-module.html#_AXES2TUPLE" class="summary-name" onclick="show_private();">_AXES2TUPLE</a> = <code title="{'sxyz':(0, 0, 0, 0), 'sxyx':(0, 0, 1, 0), 'sxzy':(0, 1, 0, 0), 'sxzx'\
+:(0, 1, 1, 0), 'syzx':(1, 0, 0, 0), 'syzy':(1, 0, 1, 0), 'syxz':(1, 1,\
+ 0, 0), 'syxy':(1, 1, 1, 0), 'szxy':(2, 0, 0, 0), 'szxz':(2, 0, 1, 0),\
+ 'szyx':(2, 1, 0, 0), 'szyz':(2, 1, 1, 0), 'rzyx':(0, 0, 0, 1), 'rxyx'\
+:(0, 0, 1, 1), 'ryzx':(0, 1, 0, 1), 'rxzx':(0, 1, 1, 1), 'rxzy':(1, 0,\
+ 0, 1), 'ryzy':(1, 0, 1, 1), 'rzxy':(1, 1, 0, 1), 'ryxy':(1, 1, 1, 1),\
+ 'ryxz':(2, 0, 0, 1), 'rzxz':(2, 0, 1, 1), 'rxyz':(2, 1, 0, 1), 'rzyz'\
+:(2, 1, 1, 1)}">{'sxyz':(0, 0, 0, 0), 'sxyx':(0, 0, 1, 0), 'sxzy<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_TUPLE2AXES"></a><span class="summary-name">_TUPLE2AXES</span> = <code title="dict((v, k) for k, v in _AXES2TUPLE.items())">dict((v, k) for k, v in _AXES2TUPLE.items())</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="scale_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">scale_matrix</span>(<span class="sig-arg">factor</span>,
+        <span class="sig-arg">origin</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">direction</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return matrix to scale by factor around origin in direction.</p>
+<p>Use factor -1 for point symmetry.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>v = (numpy.random.rand(4, 5) - 0.5) * 20
+<span class="py-prompt">&gt;&gt;&gt; </span>v[3] = 1
+<span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(-1.234)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(numpy.dot(S, v)[:3], -1.234*v[:3])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>factor = random.random() * 10 - 5
+<span class="py-prompt">&gt;&gt;&gt; </span>origin = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>direct = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(factor, origin)
+<span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(factor, origin, direct)</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="projection_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">projection_matrix</span>(<span class="sig-arg">point</span>,
+        <span class="sig-arg">normal</span>,
+        <span class="sig-arg">direction</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">perspective</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">pseudo</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return matrix to project onto plane defined by point and normal.</p>
+<p>Using either perspective point, projection direction, or none of both.</p>
+<p>If pseudo is True, perspective projections will preserve relative depth
+such that Perspective = dot(Orthogonal, PseudoPerspective).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>P = projection_matrix([0, 0, 0], [1, 0, 0])
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(P[1:, 1:], numpy.identity(4)[1:, 1:])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>point = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>normal = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>direct = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>persp = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>P0 = projection_matrix(point, normal)
+<span class="py-prompt">&gt;&gt;&gt; </span>P1 = projection_matrix(point, normal, direction=direct)
+<span class="py-prompt">&gt;&gt;&gt; </span>P2 = projection_matrix(point, normal, perspective=persp)
+<span class="py-prompt">&gt;&gt;&gt; </span>P3 = projection_matrix(point, normal, perspective=persp, pseudo=True)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(P2, numpy.dot(P0, P3))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>P = projection_matrix([3, 0, 0], [1, 1, 0], [1, 0, 0])
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = (numpy.random.rand(4, 5) - 0.5) * 20
+<span class="py-prompt">&gt;&gt;&gt; </span>v0[3] = 1
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.dot(P, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1[1], v0[1])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1[0], 3-v1[1])
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="projection_from_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">projection_from_matrix</span>(<span class="sig-arg">matrix</span>,
+        <span class="sig-arg">pseudo</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return projection plane and perspective point from projection matrix.</p>
+<p>Return values are same as arguments for projection_matrix function:
+point, normal, direction, perspective, and pseudo.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>point = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>normal = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>direct = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>persp = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>P0 = projection_matrix(point, normal)
+<span class="py-prompt">&gt;&gt;&gt; </span>result = projection_from_matrix(P0)
+<span class="py-prompt">&gt;&gt;&gt; </span>P1 = projection_matrix(*result)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(P0, P1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>P0 = projection_matrix(point, normal, direct)
+<span class="py-prompt">&gt;&gt;&gt; </span>result = projection_from_matrix(P0)
+<span class="py-prompt">&gt;&gt;&gt; </span>P1 = projection_matrix(*result)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(P0, P1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>P0 = projection_matrix(point, normal, perspective=persp, pseudo=False)
+<span class="py-prompt">&gt;&gt;&gt; </span>result = projection_from_matrix(P0, pseudo=False)
+<span class="py-prompt">&gt;&gt;&gt; </span>P1 = projection_matrix(*result)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(P0, P1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>P0 = projection_matrix(point, normal, perspective=persp, pseudo=True)
+<span class="py-prompt">&gt;&gt;&gt; </span>result = projection_from_matrix(P0, pseudo=True)
+<span class="py-prompt">&gt;&gt;&gt; </span>P1 = projection_matrix(*result)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(P0, P1)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="clip_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">clip_matrix</span>(<span class="sig-arg">left</span>,
+        <span class="sig-arg">right</span>,
+        <span class="sig-arg">bottom</span>,
+        <span class="sig-arg">top</span>,
+        <span class="sig-arg">near</span>,
+        <span class="sig-arg">far</span>,
+        <span class="sig-arg">perspective</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return matrix to obtain normalized device coordinates from frustum.</p>
+<p>The frustum bounds are axis-aligned along x (left, right),
+y (bottom, top) and z (near, far).</p>
+<p>Normalized device coordinates are in range [-1, 1] if coordinates are
+inside the frustum.</p>
+<p>If perspective is True the frustum is a truncated pyramid with the
+perspective point at origin and direction along z axis, otherwise an
+orthographic canonical view volume (a box).</p>
+<p>Homogeneous coordinates transformed by the perspective clip matrix
+need to be dehomogenized (divided by w coordinate).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>frustum = numpy.random.rand(6)
+<span class="py-prompt">&gt;&gt;&gt; </span>frustum[1] += frustum[0]
+<span class="py-prompt">&gt;&gt;&gt; </span>frustum[3] += frustum[2]
+<span class="py-prompt">&gt;&gt;&gt; </span>frustum[5] += frustum[4]
+<span class="py-prompt">&gt;&gt;&gt; </span>M = clip_matrix(perspective=False, *frustum)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.dot(M, [frustum[0], frustum[2], frustum[4], 1])
+<span class="py-output">array([-1., -1., -1.,  1.])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>numpy.dot(M, [frustum[1], frustum[3], frustum[5], 1])
+<span class="py-output">array([ 1.,  1.,  1.,  1.])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>M = clip_matrix(perspective=True, *frustum)
+<span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.dot(M, [frustum[0], frustum[2], frustum[4], 1])
+<span class="py-prompt">&gt;&gt;&gt; </span>v / v[3]
+<span class="py-output">array([-1., -1., -1.,  1.])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.dot(M, [frustum[1], frustum[3], frustum[4], 1])
+<span class="py-prompt">&gt;&gt;&gt; </span>v / v[3]
+<span class="py-output">array([ 1.,  1., -1.,  1.])</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="shear_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">shear_matrix</span>(<span class="sig-arg">angle</span>,
+        <span class="sig-arg">direction</span>,
+        <span class="sig-arg">point</span>,
+        <span class="sig-arg">normal</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return matrix to shear by angle along direction vector on shear plane.</p>
+<p>The shear plane is defined by a point and normal vector. The direction
+vector must be orthogonal to the plane's normal vector.</p>
+<p>A point P is transformed by the shear matrix into P&quot; such that
+the vector P-P&quot; is parallel to the direction vector and its extent is
+given by the angle of P-P'-P&quot;, where P' is the orthogonal projection
+of P onto the shear plane.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>angle = (random.random() - 0.5) * 4*math.pi
+<span class="py-prompt">&gt;&gt;&gt; </span>direct = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>point = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>normal = numpy.cross(direct, numpy.random.random(3))
+<span class="py-prompt">&gt;&gt;&gt; </span>S = shear_matrix(angle, direct, point, normal)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(1, numpy.linalg.det(S))
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="decompose_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">decompose_matrix</span>(<span class="sig-arg">matrix</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return sequence of transformations from transformation matrix.</p>
+<dl class="rst-docutils">
+<dt>matrix <span class="classifier-delimiter">:</span> <span class="rst-classifier">array_like</span></dt>
+<dd>Non-degenerative homogeneous transformation matrix</dd>
+<dt>Return tuple of:</dt>
+<dd>scale : vector of 3 scaling factors
+shear : list of shear factors for x-y, x-z, y-z axes
+angles : list of Euler angles about static x, y, z axes
+translate : translation vector along x, y, z axes
+perspective : perspective partition of matrix</dd>
+</dl>
+<p>Raise ValueError if matrix is of wrong type or degenerative.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>T0 = translation_matrix([1, 2, 3])
+<span class="py-prompt">&gt;&gt;&gt; </span>scale, shear, angles, trans, persp = decompose_matrix(T0)
+<span class="py-prompt">&gt;&gt;&gt; </span>T1 = translation_matrix(trans)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(T0, T1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(0.123)
+<span class="py-prompt">&gt;&gt;&gt; </span>scale, shear, angles, trans, persp = decompose_matrix(S)
+<span class="py-prompt">&gt;&gt;&gt; </span>scale[0]
+<span class="py-output">0.123</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R0 = euler_matrix(1, 2, 3)
+<span class="py-prompt">&gt;&gt;&gt; </span>scale, shear, angles, trans, persp = decompose_matrix(R0)
+<span class="py-prompt">&gt;&gt;&gt; </span>R1 = euler_matrix(*angles)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(R0, R1)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="compose_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">compose_matrix</span>(<span class="sig-arg">scale</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">shear</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">angles</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">translate</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">perspective</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return transformation matrix from sequence of transformations.</p>
+<p>This is the inverse of the decompose_matrix function.</p>
+<dl class="rst-docutils">
+<dt>Sequence of transformations:</dt>
+<dd>scale : vector of 3 scaling factors
+shear : list of shear factors for x-y, x-z, y-z axes
+angles : list of Euler angles about static x, y, z axes
+translate : translation vector along x, y, z axes
+perspective : perspective partition of matrix</dd>
+</dl>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>scale = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>shear = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>angles = (numpy.random.random(3) - 0.5) * (2*math.pi)
+<span class="py-prompt">&gt;&gt;&gt; </span>trans = numpy.random.random(3) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>persp = numpy.random.random(4) - 0.5
+<span class="py-prompt">&gt;&gt;&gt; </span>M0 = compose_matrix(scale, shear, angles, trans, persp)
+<span class="py-prompt">&gt;&gt;&gt; </span>result = decompose_matrix(M0)
+<span class="py-prompt">&gt;&gt;&gt; </span>M1 = compose_matrix(*result)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(M0, M1)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="orthogonalization_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">orthogonalization_matrix</span>(<span class="sig-arg">lengths</span>,
+        <span class="sig-arg">angles</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return orthogonalization matrix for crystallographic cell coordinates.</p>
+<p>Angles are expected in degrees.</p>
+<p>The de-orthogonalization matrix is the inverse.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>O = orthogonalization_matrix([10, 10, 10], [90, 90, 90])
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(O[:3, :3], numpy.identity(3, float) * 10)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>O = orthogonalization_matrix([9.8, 12.0, 15.5], [87.2, 80.7, 69.7])
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(numpy.sum(O), 43.063229)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="affine_matrix_from_points"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">affine_matrix_from_points</span>(<span class="sig-arg">v0</span>,
+        <span class="sig-arg">v1</span>,
+        <span class="sig-arg">shear</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">scale</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">usesvd</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return affine transform matrix to register two point sets.</p>
+<p>v0 and v1 are shape (ndims, *) arrays of at least ndims non-homogeneous
+coordinates, where ndims is the dimensionality of the coordinate space.</p>
+<p>If shear is False, a similarity transformation matrix is returned.
+If also scale is False, a rigid/Euclidean transformation matrix
+is returned.</p>
+<p>By default the algorithm by Hartley and Zissermann [15] is used.
+If usesvd is True, similarity and Euclidean transformation matrices
+are calculated by minimizing the weighted sum of squared deviations
+(RMSD) according to the algorithm by Kabsch [8].
+Otherwise, and if ndims is 3, the quaternion based algorithm by Horn [9]
+is used, which is slower when using this Python implementation.</p>
+<p>The returned matrix performs rotation, translation and uniform scaling
+(if specified).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = [[0, 1031, 1031, 0], [0, 0, 1600, 1600]]
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = [[675, 826, 826, 677], [55, 52, 281, 277]]
+<span class="py-prompt">&gt;&gt;&gt; </span>affine_matrix_from_points(v0, v1)
+<span class="py-output">array([[   0.14549,    0.00062,  675.50008],</span>
+<span class="py-output">       [   0.00048,    0.14094,   53.24971],</span>
+<span class="py-output">       [   0.     ,    0.     ,    1.     ]])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>T = translation_matrix(numpy.random.random(3)-0.5)
+<span class="py-prompt">&gt;&gt;&gt; </span>R = random_rotation_matrix(numpy.random.random(3))
+<span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(random.random())
+<span class="py-prompt">&gt;&gt;&gt; </span>M = concatenate_matrices(T, R, S)
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = (numpy.random.rand(4, 100) - 0.5) * 20
+<span class="py-prompt">&gt;&gt;&gt; </span>v0[3] = 1
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.dot(M, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>v0[:3] += numpy.random.normal(0, 1e-8, 300).reshape(3, -1)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = affine_matrix_from_points(v0[:3], v1[:3])
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v0))
+<span class="py-output">True</span></pre>
+<p>More examples in superimposition_matrix()</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="superimposition_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">superimposition_matrix</span>(<span class="sig-arg">v0</span>,
+        <span class="sig-arg">v1</span>,
+        <span class="sig-arg">scale</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">usesvd</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return matrix to transform given 3D point set into second point set.</p>
+<p>v0 and v1 are shape (3, *) or (4, *) arrays of at least 3 points.</p>
+<p>The parameters scale and usesvd are explained in the more general
+affine_matrix_from_points function.</p>
+<p>The returned matrix is a similarity or Euclidean transformation matrix.
+This function has a fast C implementation in transformations.c.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = numpy.random.rand(3, 10)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(M, numpy.identity(4))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = random_rotation_matrix(numpy.random.random(3))
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = [[1,0,0], [0,1,0], [0,0,1], [1,1,1]]
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.dot(R, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v0))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v0 = (numpy.random.rand(4, 100) - 0.5) * 20
+<span class="py-prompt">&gt;&gt;&gt; </span>v0[3] = 1
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.dot(R, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v0))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>S = scale_matrix(random.random())
+<span class="py-prompt">&gt;&gt;&gt; </span>T = translation_matrix(numpy.random.random(3)-0.5)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = concatenate_matrices(T, R, S)
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.dot(M, v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>v0[:3] += numpy.random.normal(0, 1e-9, 300).reshape(3, -1)
+<span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v1, scale=True)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v0))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v1, scale=True, usesvd=False)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v0))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.empty((4, 100, 3))
+<span class="py-prompt">&gt;&gt;&gt; </span>v[:, :, 0] = v0
+<span class="py-prompt">&gt;&gt;&gt; </span>M = superimposition_matrix(v0, v1, scale=True, usesvd=False)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, numpy.dot(M, v[:, :, 0]))
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="euler_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">euler_matrix</span>(<span class="sig-arg">ai</span>,
+        <span class="sig-arg">aj</span>,
+        <span class="sig-arg">ak</span>,
+        <span class="sig-arg">axes</span>=<span class="sig-default">'sxyz'</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return homogeneous rotation matrix from Euler angles and axis sequence.</p>
+<p>ai, aj, ak : Euler's roll, pitch and yaw angles
+axes : One of 24 axis sequences as string or encoded tuple</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>R = euler_matrix(1, 2, 3, <span class="py-string">'syxz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(numpy.sum(R[0]), -1.34786452)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = euler_matrix(1, 2, 3, (0, 1, 0, 1))
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(numpy.sum(R[0]), -0.383436184)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>ai, aj, ak = (4*math.pi) * (numpy.random.random(3) - 0.5)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> axes <span class="py-keyword">in</span> _AXES2TUPLE.keys():
+<span class="py-more">... </span>   R = euler_matrix(ai, aj, ak, axes)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> axes <span class="py-keyword">in</span> _TUPLE2AXES.keys():
+<span class="py-more">... </span>   R = euler_matrix(ai, aj, ak, axes)</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="euler_from_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">euler_from_matrix</span>(<span class="sig-arg">matrix</span>,
+        <span class="sig-arg">axes</span>=<span class="sig-default">'sxyz'</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return Euler angles from rotation matrix for specified axis sequence.</p>
+<p>axes : One of 24 axis sequences as string or encoded tuple</p>
+<p>Note that many Euler angle triplets can describe one matrix.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>R0 = euler_matrix(1, 2, 3, <span class="py-string">'syxz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>al, be, ga = euler_from_matrix(R0, <span class="py-string">'syxz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>R1 = euler_matrix(al, be, ga, <span class="py-string">'syxz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(R0, R1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>angles = (4*math.pi) * (numpy.random.random(3) - 0.5)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> axes <span class="py-keyword">in</span> _AXES2TUPLE.keys():
+<span class="py-more">... </span>   R0 = euler_matrix(axes=axes, *angles)
+<span class="py-more">... </span>   R1 = euler_matrix(axes=axes, *euler_from_matrix(R0, axes))
+<span class="py-more">... </span>   <span class="py-keyword">if</span> <span class="py-keyword">not</span> numpy.allclose(R0, R1): <span class="py-keyword">print</span>(axes, <span class="py-string">&quot;failed&quot;</span>)</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="quaternion_from_euler"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">quaternion_from_euler</span>(<span class="sig-arg">ai</span>,
+        <span class="sig-arg">aj</span>,
+        <span class="sig-arg">ak</span>,
+        <span class="sig-arg">axes</span>=<span class="sig-default">'sxyz'</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return quaternion from Euler angles and axis sequence.</p>
+<p>ai, aj, ak : Euler's roll, pitch and yaw angles
+axes : One of 24 axis sequences as string or encoded tuple</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_euler(1, 2, 3, <span class="py-string">'ryxz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [0.435953, 0.310622, -0.718287, 0.444435])
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="quaternion_from_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">quaternion_from_matrix</span>(<span class="sig-arg">matrix</span>,
+        <span class="sig-arg">isprecise</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return quaternion from rotation matrix.</p>
+<p>If isprecise is True, the input matrix is assumed to be a precise rotation
+matrix and a faster algorithm is used.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(numpy.identity(4), True)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [1, 0, 0, 0])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(numpy.diag([1, -1, -1, 1]))
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [0, 1, 0, 0]) <span class="py-keyword">or</span> numpy.allclose(q, [0, -1, 0, 0])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = rotation_matrix(0.123, (1, 2, 3))
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(R, True)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [0.9981095, 0.0164262, 0.0328524, 0.0492786])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = [[-0.545, 0.797, 0.260, 0], [0.733, 0.603, -0.313, 0],
+<span class="py-more">... </span>     [-0.407, 0.021, -0.913, 0], [0, 0, 0, 1]]
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(R)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [0.19069, 0.43736, 0.87485, -0.083611])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = [[0.395, 0.362, 0.843, 0], [-0.626, 0.796, -0.056, 0],
+<span class="py-more">... </span>     [-0.677, -0.498, 0.529, 0], [0, 0, 0, 1]]
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(R)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(q, [0.82336615, -0.13610694, 0.46344705, -0.29792603])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>R = random_rotation_matrix()
+<span class="py-prompt">&gt;&gt;&gt; </span>q = quaternion_from_matrix(R)
+<span class="py-prompt">&gt;&gt;&gt; </span>is_same_transform(R, quaternion_matrix(q))
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="random_quaternion"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">random_quaternion</span>(<span class="sig-arg">rand</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return uniform random unit quaternion.</p>
+<dl class="rst-docutils">
+<dt>rand: array like or None</dt>
+<dd>Three independent random variables that are uniformly distributed
+between 0 and 1.</dd>
+</dl>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>q = random_quaternion()
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(1, vector_norm(q))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>q = random_quaternion(numpy.random.random(3))
+<span class="py-prompt">&gt;&gt;&gt; </span>len(q.shape), q.shape[0]==4
+<span class="py-output">(1, True)</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="random_rotation_matrix"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">random_rotation_matrix</span>(<span class="sig-arg">rand</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return uniform random rotation matrix.</p>
+<dl class="rst-docutils">
+<dt>rand: array like</dt>
+<dd>Three independent random variables that are uniformly distributed
+between 0 and 1 for each returned quaternion.</dd>
+</dl>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>R = random_rotation_matrix()
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(numpy.dot(R.T, R), numpy.identity(4))
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="vector_norm"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">vector_norm</span>(<span class="sig-arg">data</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return length, i.e. Euclidean norm, of ndarray along axis.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.random.random(3)
+<span class="py-prompt">&gt;&gt;&gt; </span>n = vector_norm(v)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(n, numpy.linalg.norm(v))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.random.rand(6, 5, 3)
+<span class="py-prompt">&gt;&gt;&gt; </span>n = vector_norm(v, axis=-1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(n, numpy.sqrt(numpy.sum(v*v, axis=2)))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>n = vector_norm(v, axis=1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(n, numpy.sqrt(numpy.sum(v*v, axis=1)))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v = numpy.random.rand(5, 4, 3)
+<span class="py-prompt">&gt;&gt;&gt; </span>n = numpy.empty((5, 3))
+<span class="py-prompt">&gt;&gt;&gt; </span>vector_norm(v, axis=1, out=n)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(n, numpy.sqrt(numpy.sum(v*v, axis=1)))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>vector_norm([])
+<span class="py-output">0.0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>vector_norm([1])
+<span class="py-output">1.0</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="unit_vector"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">unit_vector</span>(<span class="sig-arg">data</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return ndarray normalized by length, i.e. Euclidean norm, along axis.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>v0 = numpy.random.random(3)
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = unit_vector(v0)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, v0 / numpy.linalg.norm(v0))
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v0 = numpy.random.rand(5, 4, 3)
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = unit_vector(v0, axis=-1)
+<span class="py-prompt">&gt;&gt;&gt; </span>v2 = v0 / numpy.expand_dims(numpy.sqrt(numpy.sum(v0*v0, axis=2)), 2)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, v2)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v1 = unit_vector(v0, axis=1)
+<span class="py-prompt">&gt;&gt;&gt; </span>v2 = v0 / numpy.expand_dims(numpy.sqrt(numpy.sum(v0*v0, axis=1)), 1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, v2)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v1 = numpy.empty((5, 4, 3))
+<span class="py-prompt">&gt;&gt;&gt; </span>unit_vector(v0, axis=1, out=v1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(v1, v2)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>list(unit_vector([]))
+<span class="py-output">[]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>list(unit_vector([1]))
+<span class="py-output">[1.0]</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="angle_between_vectors"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">angle_between_vectors</span>(<span class="sig-arg">v0</span>,
+        <span class="sig-arg">v1</span>,
+        <span class="sig-arg">directed</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">axis</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return angle between vectors.</p>
+<p>If directed is False, the input vectors are interpreted as undirected axes,
+i.e. the maximum angle is pi/2.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>a = angle_between_vectors([1, -2, 3], [-1, 2, -3])
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(a, math.pi)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>a = angle_between_vectors([1, -2, 3], [-1, 2, -3], directed=False)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(a, 0)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v0 = [[2, 0, 0, 2], [0, 2, 0, 2], [0, 0, 2, 2]]
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = [[3], [0], [0]]
+<span class="py-prompt">&gt;&gt;&gt; </span>a = angle_between_vectors(v0, v1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(a, [0, 1.5708, 1.5708, 0.95532])
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>v0 = [[2, 0, 0], [2, 0, 0], [0, 2, 0], [2, 0, 0]]
+<span class="py-prompt">&gt;&gt;&gt; </span>v1 = [[0, 3, 0], [0, 0, 3], [0, 0, 3], [3, 3, 3]]
+<span class="py-prompt">&gt;&gt;&gt; </span>a = angle_between_vectors(v0, v1, axis=1)
+<span class="py-prompt">&gt;&gt;&gt; </span>numpy.allclose(a, [1.5708, 1.5708, 1.5708, 0.95532])
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_import_module"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_import_module</span>(<span class="sig-arg">name</span>,
+        <span class="sig-arg">package</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">warn</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">prefix</span>=<span class="sig-default">'_py_'</span>,
+        <span class="sig-arg">ignore</span>=<span class="sig-default">'_'</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Try import all public attributes from module into global namespace.</p>
+<p>Existing attributes with name clashes are renamed with prefix.
+Attributes starting with underscore are ignored by default.</p>
+<p>Return True on successful import.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_AXES2TUPLE"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_AXES2TUPLE</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{'sxyz':(0, 0, 0, 0), 'sxyx':(0, 0, 1, 0), 'sxzy':(0, 1, 0, 0), 'sxzx'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+:(0, 1, 1, 0), 'syzx':(1, 0, 0, 0), 'syzy':(1, 0, 1, 0), 'syxz':(1, 1,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 0, 0), 'syxy':(1, 1, 1, 0), 'szxy':(2, 0, 0, 0), 'szxz':(2, 0, 1, 0),<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'szyx':(2, 1, 0, 0), 'szyz':(2, 1, 1, 0), 'rzyx':(0, 0, 0, 1), 'rxyx'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+:(0, 0, 1, 1), 'ryzx':(0, 1, 0, 1), 'rxzx':(0, 1, 1, 1), 'rxzy':(1, 0,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 0, 1), 'ryzy':(1, 0, 1, 1), 'rzxy':(1, 1, 0, 1), 'ryxy':(1, 1, 1, 1),<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'ryxz':(2, 0, 0, 1), 'rzxz':(2, 0, 1, 1), 'rxyz':(2, 1, 0, 1), 'rzyz'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+:(2, 1, 1, 1)}
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="py3DEngine-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >python 3D Engine</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Aug 27 22:52:00 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
