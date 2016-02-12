@@ -161,9 +161,6 @@ class RunScene(object):
 		self._mouseButton = button
 		self._mouseState  = state
 
-		print self._rotation, self._position, self._zoom
-
-
 
 	def mouseMotionHandler(self,x, y):
 		
@@ -202,7 +199,6 @@ class RunScene(object):
 		self.InitGL(*self._windowSize)
 
 		self.loadData()
-		print "Load finnished"
 		glutMainLoop()
 
 

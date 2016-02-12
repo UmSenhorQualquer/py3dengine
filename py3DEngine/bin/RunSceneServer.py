@@ -150,16 +150,16 @@ def mouseMotionHandler(x, y):
 def close_server():
 	global server_socket
 	if server_socket:
-		print "-> closing server"
+		print("-> closing server")
 		server_socket.close()
-		print "<- server closed"
+		print("<- server closed")
 
 def server_handler():
 	global scene, server_socket
 
 	while True:
 		conn, addr 	= server_socket.accept()
-		print "Connected to", addr
+		print("Connected to", addr)
 
 		try:
 			while True:
@@ -179,7 +179,7 @@ def server_handler():
 			pass
 			print traceback.print_exc()
 			
-		print "Connection to", addr,"down"
+		print("Connection to", addr,"down")
 
 
 def main():

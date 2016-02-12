@@ -157,9 +157,7 @@ def __main__():
 	img = scene.cameras[0].rayCastingImage(5, [x for x in scene.objects if x.active], multipleprocessing=False)
 
 	stop = timeit.default_timer()
-	print stop - start 
-
-
+	
 	cv2.imshow('img', img)
 	cv2.waitKey(0)
 

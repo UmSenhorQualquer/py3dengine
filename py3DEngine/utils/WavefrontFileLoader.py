@@ -15,17 +15,17 @@ class WavefrontFileLoader:
             if not values: continue
 
             if values[0] == 'v':
-                v = map(float, values[1:4])
+                v = list(map(float, values[1:4]))
                 if swapyz: v = v[0], v[2], v[1]
                 self.vertices.append(v)
 
             elif values[0] == 'vn':
-                v = map(float, values[1:4])
+                v = list(map(float, values[1:4]))
                 if swapyz: v = v[0], v[2], v[1]
                 self.normals.append(v)
 
             elif values[0] == 'vt':
-                self.texcoords.append(map(float, values[1:3]))
+                self.texcoords.append(list(map(float, values[1:3])))
 
             elif values[0] in ('usemtl', 'usemat'):
                 material = values[1]
@@ -47,5 +47,5 @@ if __name__ == "__main__":
 
     obj = WavefrontFileLoader('/home/ricardo/Desktop/teste.obj')
 
-    print obj.faces
-    print obj.vertices
+    print(obj.faces)
+    print(obj.vertices)

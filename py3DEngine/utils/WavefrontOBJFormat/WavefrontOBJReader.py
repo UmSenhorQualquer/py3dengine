@@ -37,7 +37,7 @@ class WavefrontOBJReader(object):
 				currentMaterial['name'] = line.strip('\n')[7:]
 
 			if line.startswith('Ka '):
-				values = map(float, line.replace(',','.').strip('\n')[3:].split(' '))
+				values = list(map(float, line.replace(',','.').strip('\n')[3:].split(' ')))
 				currentMaterial['Ka'] = values
 
 			if line.startswith('d '):
@@ -65,7 +65,7 @@ class WavefrontOBJReader(object):
 				currentObject.color = self._materials[material]['Ka']
 
 			if line.startswith('v '):
-				values = map(float, line.replace(',','.').strip('\n')[2:].split(' ')[:3] )
+				values = list(map(float, line.replace(',','.').strip('\n')[2:].split(' ')[:3] ))
 				currentObject.addVertice( values )
 
 			if line.startswith('# '):

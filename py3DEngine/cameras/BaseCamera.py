@@ -3,10 +3,10 @@ import cv2, math, numpy as np, itertools, sys
 from py3DEngine.cameras.Ray import Ray
 
 try: from multiprocessing import Pool
-except: print 'No multiprocessing library'
+except: print('No multiprocessing library')
 
 try: import sharedmem
-except: print 'No sharedmem library'
+except: print('No sharedmem library')
 
 
 class BaseCamera(object):
@@ -138,7 +138,7 @@ class BaseCamera(object):
 		elif isinstance(value, list ): 
 			self._rvecs = np.float32( value ).T
 		elif isinstance(value, str ): 
-			self._rvecs = np.float32( map(float,value.split(',')) ).T
+			self._rvecs = np.float32( list(map(float,value.split(','))) ).T
 		else: 
 			self._rvecs = value
 
@@ -154,7 +154,7 @@ class BaseCamera(object):
 		elif isinstance(value, list ): 
 			self._cameraMatrix = np.matrix([value[0:3], value[3:6], value[6:9]])
 		elif isinstance(value, str ): 
-			value = map(float,value.split(','))
+			value = list(map(float,value.split(',')))
 			self._cameraMatrix = np.matrix([value[0:3], value[3:6], value[6:9]])
 		else: 
 			self._cameraMatrix = value
@@ -170,7 +170,7 @@ class BaseCamera(object):
 		elif isinstance(value, list ): 
 			self._cameraDistortion = np.matrix(value)
 		elif isinstance(value, str ): 
-			self._cameraDistortion = np.matrix( map(float,value.split(',')) )
+			self._cameraDistortion = np.matrix( list(map(float,value.split(','))) )
 		else: 
 			self._cameraDistortion = value 
 	
@@ -223,16 +223,17 @@ class BaseCamera(object):
 	@rays.setter
 	def rays(self, value): self._rays = value
 
-	def rayCastingImage(self, pixelStep, objects, multipleprocessing = False):
+	def rayCastingImage(self, pixelStep, objects, multipleprocessing=False, box=None):
 		initial = int(round(pixelStep/2))
-		xsRange = range( initial, int(self.cameraWidth), pixelStep )
-		ysRange = range( initial, int(self.cameraHeight), pixelStep )
+		if box==None: box = 0, 0, int(self.cameraWidth), int(self.cameraHeight)
+		xsRange = range( initial+box[0], box[2], pixelStep )
+		ysRange = range( initial+box[1], box[3], pixelStep )
 		positions = list(itertools.product(xsRange, ysRange))
-
-		img = sharedmem.zeros( (self.cameraHeight, self.cameraWidth, 3), dtype=np.uint8 )
+		
 		total = float(len(xsRange)*len(ysRange))-1.0
 
 		if not multipleprocessing:
+			img = np.zeros( (self.cameraHeight, self.cameraWidth, 3), dtype=np.uint8 )
 			for i, (x,y) in enumerate(positions):
 				p0, p1 = self.pixelLinePoints(x,y)
 				ray = Ray(p0, p1, depth=0)
@@ -242,6 +243,7 @@ class BaseCamera(object):
 
 				sys.stdout.write('\r%f%%' %  (float(i)/total*100.0) )
 		else:
+			img = sharedmem.zeros( (self.cameraHeight, self.cameraWidth, 3), dtype=np.uint8 )
 			split = 10
 			jump = int(total / split)
 		

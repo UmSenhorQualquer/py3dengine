@@ -32,13 +32,13 @@ class WavefrontOBJObject(object):
 
 	def __value2String(self, value):
 		if isinstance(value, tuple): 
-			return ",".join( map(str, value) )
+			return ",".join( list(map(str, value) ))
 
 		if isinstance(value, list): 
-			return ",".join( map(str, value) )
+			return ",".join( list(map(str, value) ))
 
 		if isinstance(value, np.ndarray): 
-			return ",".join( map(str, value) )
+			return ",".join( list(map(str, value) ))
 
 
 		return str(value)
@@ -57,7 +57,7 @@ class WavefrontOBJObject(object):
 		for face in self._faces:
 			values = [nvertices+n for n in face]
 			#values = face
-			out.append('f %s' % ' '.join(map(str,values)) )
+			out.append('f %s' % ' '.join(list(map(str,values)) ))
 
 		for pointIndex in self._points:
 			out.append('p %s' % str(pointIndex+nvertices) )

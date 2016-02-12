@@ -16,7 +16,7 @@ class SceneClient(GLScene):
 			self._client = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 			self._client.connect ( self._host )
 		except:
-			print 'No server available'
+			print('No server available')
 			self._last_try = time.time()
 			self._client = None
 

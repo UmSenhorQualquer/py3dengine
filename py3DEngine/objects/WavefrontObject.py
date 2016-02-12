@@ -7,7 +7,7 @@ try:
 	from OpenGL.GLUT import *
 	from OpenGL.GLU import *
 except:
-	print 'No OpenGL libs'
+	print('No OpenGL libs')
 
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
@@ -152,7 +152,7 @@ class WavefrontObject(WavefrontOBJSceneObject):
 				self._indexes = np.array(self._indexes)-1
 				self.updateMesh()
 			except:
-				print "Was not possible to import the file {0}".format(value)
+				print("Was not possible to import the file {0}".format(value))
 		else:
 
 			self.__createTerrain(self._resolution, self._terrain, self._amplitude)
@@ -204,7 +204,7 @@ class WavefrontObject(WavefrontOBJSceneObject):
 			self._originals = np.array(points)
 		except:
 			self._originals = self._points.copy()
-			print "Old file format imported"
+			print("Old file format imported")
 
 		
 		WavefrontOBJSceneObject.wavefrontobject.fset(self, value )

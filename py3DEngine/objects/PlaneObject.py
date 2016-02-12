@@ -3,7 +3,7 @@ try:
 	from OpenGL.GLUT import *
 	from OpenGL.GLU import *
 except:
-	print 'No OpenGL libs'
+	print('No OpenGL libs')
 
 import math, numpy as np
 import cv2

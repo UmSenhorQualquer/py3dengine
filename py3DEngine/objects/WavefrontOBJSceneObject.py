@@ -18,9 +18,9 @@ class WavefrontOBJSceneObject(SceneObject):
 		obj = WavefrontOBJObject(self.name)
 		obj.color = self.color
 
-		obj.addProperty('position', 	','.join(map(str, self.position 	)))
-		obj.addProperty('centerOfMass', ','.join(map(str, self.centerOfMass )))
-		obj.addProperty('rotation', 	','.join(map(str, self.rotation		)))
+		obj.addProperty('position', 	','.join(list(map(str, self.position 	))))
+		obj.addProperty('centerOfMass', ','.join(list(map(str, self.centerOfMass ))))
+		obj.addProperty('rotation', 	','.join(list(map(str, self.rotation		))))
 		obj.addProperty('active', 		str(self.active))
 		obj.addProperty('refraction', 	str(self.refraction))
 		

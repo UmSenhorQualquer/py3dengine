@@ -172,7 +172,7 @@ class RunScene(object):
 		self.InitGL(*self._windowSize)
 
 		self.loadData()
-		print "Load finnished"
+		print("Load finnished")
 		glutMainLoop()
 
 
