@@ -55,8 +55,14 @@ class SceneObject(object):
 		Rx = trans.rotation_matrix( angleX, (1.0,0.0,0) )
 		Ry = trans.rotation_matrix( angleY, (0,1.0,0) 	)
 		Rz = trans.rotation_matrix( angleZ, (0,0.0,1.0) )
-		self._R = self.rotationMatrix * np.matrix(Rx)*np.matrix(Ry)*np.matrix(Rz)
+		self._R = (self.rotationMatrix)*np.matrix(Rx)*np.matrix(Ry)*np.matrix(Rz)
 		self.updateMesh()
+
+		#for child in self._childs: child.Rotate(angleX, angleY, angleZ)
+		#for child in self._childs: 
+		#	child._R *= self._R
+		#	self.updateMesh()
+
 
 	def projectIn(self, camera): return []
 
@@ -150,7 +156,9 @@ class SceneObject(object):
 	@property
 	def position(self): return self._obj_position
 	@position.setter
-	def position(self, value):  self._obj_position = value; self.updateMesh()
+	def position(self, value):  
+		self._obj_position = value; 
+		self.updateMesh()
 
 	@property
 	def rotation(self): return self._obj_rotation

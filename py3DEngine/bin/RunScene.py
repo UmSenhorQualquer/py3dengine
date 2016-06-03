@@ -9,12 +9,12 @@ class RunScene(object):
 	def __init__(self, scene, videowriter=None):
 		self._windowSize 	= 640, 480
 		self._rotation 		= [0,0,0]
-		self._zoom 			= 9
+		self._zoom 			= 2
 		self._mouseButton 	= 1
 		self._mouseState 	= 1
 		self._lastMouseX 	= 0
 		self._lastMouseY 	= 0
-		self._position 		= [-114.11685213,  -27.68483338]
+		self._position 		= [0,  0]
 		self._videowriter 	= videowriter
 		self._spamreader  	= None
 		self._currentTime 	= 0
@@ -123,8 +123,8 @@ class RunScene(object):
 
 
 	def onMouseHandler(self, button, state, x, y):
-		if button==3 and state==1: self._zoom -=50
-		if button==4 and state==1: self._zoom +=50
+		if button==3 and state==1: self._zoom -=1
+		if button==4 and state==1: self._zoom +=1
 
 		self._lastMouseX = x
 		self._lastMouseY = y
@@ -162,7 +162,7 @@ class RunScene(object):
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 
 		glutInitWindowSize(*self._windowSize)
-		glutInitWindowPosition(0, 0)
+		#glutInitWindowPosition(0, 0)
 		glutCreateWindow("World simulator")
 		glutIdleFunc(       self.DrawGL   )
 		glutReshapeFunc(    self.ReSizeGLScene )
