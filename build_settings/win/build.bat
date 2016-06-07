@@ -37,4 +37,4 @@ rem echo %DISTOUTDIR%
 
 rem echo "Running pyinstaller --additional-hooks-dir %BUILDSETTINGSDIR%\hooks --name %PROJECTNAME% --icon %BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
 
-pyinstaller --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%_v%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME%" --onefile "%MAINSCRIPT%"
+pyinstaller --additional-hooks-dir "%BUILDSETTINGSDIR%\hooks" --name "%PROJECTNAME%_v%DEV_VERSION%" --icon "%BUILDSETTINGSDIR%\%ICONNAME%"  "%MAINSCRIPT%"
