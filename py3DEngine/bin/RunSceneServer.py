@@ -209,6 +209,7 @@ def main():
 	glutInitWindowSize(*windowSize)
 	glutInitWindowPosition(0, 0)
 	glutCreateWindow("Scene server")
+	glutDisplayFunc(	DrawGL)
 	glutIdleFunc(       DrawGL   )
 	glutReshapeFunc(    ReSizeGLScene )
 	glutKeyboardFunc(   keyPressed    )
