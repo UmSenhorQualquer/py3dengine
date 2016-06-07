@@ -181,6 +181,7 @@ def server_handler():
 			
 		print("Connection to", addr,"down")
 
+def init():pass
 
 def main():
 	global server_socket
@@ -202,6 +203,7 @@ def main():
 	#################################################################
 	### Start the OpenGL window #####################################
 	#################################################################
+
 	glutInit(sys.argv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 	glutInitWindowSize(*windowSize)
