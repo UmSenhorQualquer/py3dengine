@@ -56,7 +56,7 @@ def InitGL(Width, Height):             # We call this right after our OpenGL win
 
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()                        # Reset The Projection Matrix
-	gluPerspective(47.50, float(Width)/float(Height), 0.1, 400.0)
+	gluPerspective(47.50, float(Width)/float(Height), 0.1, 900.0)
 	glMatrixMode(GL_MODELVIEW)
 
 def ReSizeGLScene(Width, Height):
@@ -64,7 +64,7 @@ def ReSizeGLScene(Width, Height):
 	glViewport(0, 0, Width, Height)
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
-	gluPerspective(47.50, float(Width)/float(Height), 0.1, 400.0)
+	gluPerspective(47.50, float(Width)/float(Height), 0.1, 900.0)
 	glMatrixMode(GL_MODELVIEW)
 
 def DrawGL():
