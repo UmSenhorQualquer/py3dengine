@@ -7,7 +7,7 @@ from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJR
 from py3DEngine.scenes.Scene import Scene
 from py3DEngine.bin.RunScene import RunScene
 
-SCENE = 'DolphinScene.obj'
+SCENE = '..\\..\\py3DSceneEditor\\py3DSceneEditor\\scene.obj'
 
 scene = Scene()
 
@@ -15,10 +15,14 @@ w = WavefrontOBJReader(SCENE)
 scene.objects = w.objects
 scene.cameras = w.cameras
 
-ellipse = scene.getObject('Test')
+#ellipse = scene.getObject('Test')
 
-print ellipse.pointIn( (0,0,0.1) )
+#print ellipse.pointIn( (0,0,0.1) )
 
+camera = scene.getCamera('Camera1')
+img = camera.rayCastingImage(5, scene.objects, box=(300,300,400,400))
 
-run = RunScene(SCENE)
-run.startScene()
+cv2.imshow('image', img)
+cv2.waitKey(0)
+#run = RunScene(scene)
+#run.startScene()

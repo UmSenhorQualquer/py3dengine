@@ -16,7 +16,7 @@ class PointObject(WavefrontOBJSceneObject):
 
 	def __init__(self, name='Untitled', p0=(0.0, 0.0,0.0)):
 		WavefrontOBJSceneObject.__init__(self,name)
-
+		self._radius = 10.0
 		self._point = p0
 
 	@property
@@ -26,7 +26,7 @@ class PointObject(WavefrontOBJSceneObject):
 
 
 	def DrawGL(self):
-		glPointSize(5.0)
+		glPointSize(self._radius)
 		glColor4f(*self.color)
 		glBegin(GL_POINTS)
 		glVertex3f(*self.point)

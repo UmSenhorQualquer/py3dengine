@@ -8,9 +8,9 @@ set PATH=%WINPYDIR%\Lib\site-packages\PyQt4;%WINPYDIR%\;%WINPYDIR%\DLLs;%WINPYDI
 rem keep nbextensions in Winpython directory, rather then %APPDATA% default
 set JUPYTER_DATA_DIR=%WINPYDIR%\..\settings
 
-set PROJECTNAME=py3DSceneEditorApp
+set PROJECTNAME=py3dengine
 set BUILDSETTINGSDIR=%WORKSPACE%\build_settings\win
-set MAINSCRIPT=%WORKSPACE%\py3DSceneEditor\__main__.py
+set MAINSCRIPT=%WORKSPACE%\py3dengine\bin\RunSceneServer.py
 set BUILDOUTDIR=%WORKSPACE%\build
 set DISTOUTDIR=%WORKSPACE%\dist
 set ICONNAME=cf_icon_128x128.ico
@@ -34,12 +34,8 @@ rem echo %DISTOUTDIR%
 @RD /S /Q %BUILDOUTDIR%
 @RD /S /Q %DISTOUTDIR%
 
-pip uninstall -y pyforms
-pip install https://github.com/UmSenhorQualquer/pyforms/archive/master.zip
-pip show pyforms
-
 pip uninstall -y py3DEngine
-pip install "%WORKSPACE%\py3DEngine_distribution"
+pip install "%WORKSPACE%\py3DEngine_distribution" --uprade
 
 rem echo "Running pyinstaller --additional-hooks-dir %BUILDSETTINGSDIR%\hooks --name %PROJECTNAME% --icon %BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
 
