@@ -1,3 +1,0 @@
-[console_scripts]
-py3DEngine-server = py3DEngine.bin.RunSceneServer:main
-

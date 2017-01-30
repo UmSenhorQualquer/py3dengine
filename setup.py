@@ -14,7 +14,7 @@ from setuptools import setup
 
 setup(
 
-	name				='py3DEngine',
+	name				='py3dengine',
 	version 			='0.0',
 	description 		="""""",
 	author  			='Ricardo Ribeiro',
@@ -23,22 +23,17 @@ setup(
 
 	
 	packages=[
-		'py3DEngine',
-		'py3DEngine.bin',
-		'py3DEngine.cameras',
-		'py3DEngine.objects',
-		'py3DEngine.scenes',
-		'py3DEngine.utils',
-		'py3DEngine.utils.WavefrontOBJFormat',
-		'py3DEngine.thirdparty',
-		],
-
-	install_requires=[
-		"pyopengl >= 3.1.0",
-		"numpy >= 1.6.1"
+		'py3dengine',
+		'py3dengine.bin',
+		'py3dengine.cameras',
+		'py3dengine.objects',
+		'py3dengine.scenes',
+		'py3dengine.utils',
+		'py3dengine.utils.WavefrontOBJFormat',
+		'py3dengine.thirdparty',
 	],
 
 	entry_points={
-		'console_scripts':['py3DEngine-server=py3DEngine.bin.RunSceneServer:main']
+		'console_scripts':['py3d-engine-server=py3dengine.bin.RunSceneServer:main']
 	}
 )
