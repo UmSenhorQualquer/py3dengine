@@ -4,7 +4,7 @@ try:
 	from OpenGL.GLU import *
 except:
 	print('No OpenGL libs')
-from py3DEngine.scenes.Scene import Scene
+from py3dengine.scenes.Scene import Scene
 
 class GLScene(Scene):
 

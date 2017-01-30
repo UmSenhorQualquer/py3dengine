@@ -1,5 +1,5 @@
 import numpy as np
-import py3DEngine.thirdparty.transformations as trans
+import py3dengine.thirdparty.transformations as trans
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *

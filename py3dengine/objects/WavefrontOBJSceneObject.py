@@ -1,6 +1,6 @@
 import numpy as np
-from py3DEngine.objects.SceneObject import SceneObject
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
+from py3dengine.objects.SceneObject import SceneObject
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
 
 class WavefrontOBJSceneObject(SceneObject):
 

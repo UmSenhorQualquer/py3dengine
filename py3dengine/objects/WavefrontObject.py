@@ -1,6 +1,6 @@
-from py3DEngine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from py3DEngine.utils.WavefrontFileLoader import WavefrontFileLoader
-from py3DEngine.objects.TriangleObject import TriangleObject
+from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
+from py3dengine.utils.WavefrontFileLoader import WavefrontFileLoader
+from py3dengine.objects.TriangleObject import TriangleObject
 import math, cv2, numpy as np
 try:
 	from OpenGL.GL import *

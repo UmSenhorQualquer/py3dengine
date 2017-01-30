@@ -4,8 +4,8 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3DEngine.scenes.TriangulationGLScene import TriangulationGLScene
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
+from py3dengine.scenes.TriangulationGLScene import TriangulationGLScene
 
 
 scene = TriangulationGLScene()

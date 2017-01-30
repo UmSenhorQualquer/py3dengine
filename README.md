@@ -13,9 +13,9 @@ The python 3D engine is a library that implements several functions to work with
 - sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui libqt4-opengl
 - sudo apt-get install python-opengl
 - sudo pip install pyosc
-- Download the py3DEngine files.
+- Download the py3dengine files.
 - Unzip the file.
-- In the terminal inside the py3DEngine directory, run: python setup.py install
+- In the terminal inside the py3dengine directory, run: python setup.py install
 
 
 ### Windows
@@ -25,6 +25,6 @@ The python 3D engine is a library that implements several functions to work with
     - http://freeglut.sourceforge.net/
 - Install OpenCV for python
 - sudo pip install pyosc
-- Download the py3DEngine files.
+- Download the py3dengine files.
 - Unzip the file.
-- In the terminal inside the py3DEngine directory, run: python setup.py install
+- In the terminal inside the py3dengine directory, run: python setup.py install

@@ -1,5 +1,5 @@
-from py3DEngine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from py3DEngine.objects.TriangleObject import TriangleObject
+from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
+from py3dengine.objects.TriangleObject import TriangleObject
 import numpy as np
 
 class CubeObject(WavefrontOBJSceneObject):

@@ -3,9 +3,9 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3DEngine.scenes.Scene import Scene
-from py3DEngine.bin.RunScene import RunScene
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
+from py3dengine.scenes.Scene import Scene
+from py3dengine.bin.RunScene import RunScene
 
 SCENE = '..\\..\\py3DSceneEditor\\py3DSceneEditor\\scene.obj'
 

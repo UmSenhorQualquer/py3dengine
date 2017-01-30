@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
 from __init__ import *
 
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3DEngine.scenes.GLScene import GLScene
-from py3DEngine.cameras.Ray import Ray
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
+from py3dengine.scenes.GLScene import GLScene
+from py3dengine.cameras.Ray import Ray
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *

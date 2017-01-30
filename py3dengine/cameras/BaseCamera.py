@@ -1,6 +1,6 @@
 #!/usr/bin/env pythonw
 import cv2, math, numpy as np, itertools, sys
-from py3DEngine.cameras.Ray import Ray
+from py3dengine.cameras.Ray import Ray
 
 try: from multiprocessing import Pool
 except: print('No multiprocessing library')

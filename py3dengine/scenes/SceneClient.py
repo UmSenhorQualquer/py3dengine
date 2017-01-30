@@ -1,7 +1,7 @@
 import traceback, pickle, socket, time
-from py3DEngine.scenes.GLScene 			import GLScene
-from py3DEngine.cameras.ClientCamera 	import ClientCamera
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
+from py3dengine.scenes.GLScene 			import GLScene
+from py3dengine.cameras.ClientCamera 	import ClientCamera
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
 
 
 class SceneClient(GLScene):

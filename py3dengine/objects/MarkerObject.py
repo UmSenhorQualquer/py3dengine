@@ -1,5 +1,5 @@
-from py3DEngine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from py3DEngine.objects.RectangleObject import RectangleObject
+from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
+from py3dengine.objects.RectangleObject import RectangleObject
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *

@@ -6,7 +6,7 @@ except:
 	print('No OpenGL libs')
 import itertools
 import numpy as np
-from py3DEngine.scenes.GLScene import GLScene
+from py3dengine.scenes.GLScene import GLScene
 
 def closestDistanceBetweenLines(a0,a1,b0,b1,clamp=False):
 	''' Given two lines defined by numpy.array pairs (a0,a1,b0,b1)

@@ -1,9 +1,9 @@
 #!/usr/bin/env pythonw
 
-from py3DEngine.cameras.BaseCamera import BaseCamera
-from py3DEngine.cameras.VirtualCamera import VirtualCamera
-from py3DEngine.cameras.PhysicsFromCamera import PhysicsFromCamera
-from py3DEngine.cameras.WavefrontOBJCamera import WavefrontOBJCamera
+from py3dengine.cameras.BaseCamera import BaseCamera
+from py3dengine.cameras.VirtualCamera import VirtualCamera
+from py3dengine.cameras.PhysicsFromCamera import PhysicsFromCamera
+from py3dengine.cameras.WavefrontOBJCamera import WavefrontOBJCamera
 
 
 class Camera(WavefrontOBJCamera, VirtualCamera, PhysicsFromCamera, BaseCamera):

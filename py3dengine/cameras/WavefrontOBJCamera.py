@@ -1,4 +1,4 @@
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
 
 class WavefrontOBJCamera(object):
 

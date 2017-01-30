@@ -2,8 +2,8 @@ from __init__ import *
 
 import sys,cv2, numpy as np, os, sys, csv
 
-from py3DEngine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3DEngine.scenes.SceneClient import SceneClient
+from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
+from py3dengine.scenes.SceneClient import SceneClient
 
 
 #PARAMETERS

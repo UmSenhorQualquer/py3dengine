@@ -34,8 +34,8 @@ rem echo %DISTOUTDIR%
 @RD /S /Q %BUILDOUTDIR%
 @RD /S /Q %DISTOUTDIR%
 
-pip uninstall -y py3DEngine
-pip install "%WORKSPACE%\py3DEngine_distribution" --uprade
+pip uninstall -y py3dengine
+pip install "%WORKSPACE%\py3dengine_distribution" --uprade
 
 rem echo "Running pyinstaller --additional-hooks-dir %BUILDSETTINGSDIR%\hooks --name %PROJECTNAME% --icon %BUILDSETTINGSDIR%\%ICONNAME% --onefile %MAINSCRIPT%"
 

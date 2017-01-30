@@ -7,7 +7,7 @@ except:
 
 import math, numpy as np
 import cv2
-from py3DEngine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
+from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
