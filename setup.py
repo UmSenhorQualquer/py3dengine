@@ -10,7 +10,7 @@ __email__       = "ricardojvr@gmail.com"
 __status__      = "Development"
 
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
 
@@ -22,16 +22,7 @@ setup(
 	license 			='MIT',
 
 	
-	packages=[
-		'py3dengine',
-		'py3dengine.bin',
-		'py3dengine.cameras',
-		'py3dengine.objects',
-		'py3dengine.scenes',
-		'py3dengine.utils',
-		'py3dengine.utils.WavefrontOBJFormat',
-		'py3dengine.thirdparty',
-	],
+	packages=find_packages(),
 
 	entry_points={
 		'console_scripts':['py3d-engine-server=py3dengine.bin.RunSceneServer:main']
