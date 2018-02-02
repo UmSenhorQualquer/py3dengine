@@ -1,8 +1,4 @@
-import sys,cv2, numpy as np, os, sys, itertools
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from OpenGL.GL import *
-
+import cv2
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
 from py3dengine.scenes.Scene import Scene
 from py3dengine.bin.RunScene import RunScene
