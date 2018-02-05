@@ -27,7 +27,7 @@ class GLScene(Scene):
 		cameras = self.cameras
 		objects = self.objects
 		
-		if self.selectedObject!=None: self.selectedObject.lookFrom()
+		if self.selected_object!=None: self.selected_object.lookFrom()
 		
 		#self.__drawGLAxis()
 

@@ -57,9 +57,9 @@ class SceneClient(GLScene):
 
 	def __getstate__(self):
 		"""Return state values to be pickled."""
-		return (self.cameras, self.objects, self.selectedObject)
+		return (self.cameras, self.objects, self.selected_object)
 
 	def __setstate__(self, state):
 		"""Restore state from the unpickled state values."""
-		self.selectedObject = None
-		self.cameras, self.objects, self.selectedObject = state
+		self.selected_object = None
+		self.cameras, self.objects, self.selected_object = state

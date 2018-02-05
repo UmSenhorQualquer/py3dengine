@@ -349,7 +349,7 @@ py3dengine.cameras.WavefrontOBJCamera.WavefrontOBJCamera.wavefrontobject	py3deng
 py3dengine.objects.CubeObject.CubeObject	py3dengine.objects.CubeObject.CubeObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.CubeObject.CubeObject.color	py3dengine.objects.CubeObject.CubeObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
 py3dengine.objects.SceneObject.SceneObject.updateMesh	py3dengine.objects.SceneObject.SceneObject-class.html#updateMesh
@@ -382,7 +382,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.CylinderObject.CylinderObject	py3dengine.objects.CylinderObject.CylinderObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.incandescence	py3dengine.objects.SceneObject.SceneObject-class.html#incandescence
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
@@ -418,7 +418,7 @@ py3dengine.objects.EllipseObject.EllipseObject	py3dengine.objects.EllipseObject.
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.EllipseObject.EllipseObject.DrawEllipse	py3dengine.objects.EllipseObject.EllipseObject-class.html#DrawEllipse
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.incandescence	py3dengine.objects.SceneObject.SceneObject-class.html#incandescence
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
@@ -453,7 +453,7 @@ py3dengine.objects.EllipsoidObject.EllipsoidObject	py3dengine.objects.EllipsoidO
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.reflectivity	py3dengine.objects.SceneObject.SceneObject-class.html#reflectivity
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.incandescence	py3dengine.objects.SceneObject.SceneObject-class.html#incandescence
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
@@ -487,7 +487,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.MarkerObject.MarkerObject	py3dengine.objects.MarkerObject.MarkerObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.RectangleObject.RectangleObject.color	py3dengine.objects.RectangleObject.RectangleObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
 py3dengine.objects.SceneObject.SceneObject.updateMesh	py3dengine.objects.SceneObject.SceneObject-class.html#updateMesh
@@ -522,7 +522,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.PlaneObject.PlaneObject	py3dengine.objects.PlaneObject.PlaneObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.PlaneObject.PlaneObject.objwidth	py3dengine.objects.PlaneObject.PlaneObject-class.html#objwidth
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
@@ -562,7 +562,7 @@ py3dengine.objects.PlaneObject.PlaneObject.maskimg	py3dengine.objects.PlaneObjec
 py3dengine.objects.RectangleObject.RectangleObject	py3dengine.objects.RectangleObject.RectangleObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.RectangleObject.RectangleObject.color	py3dengine.objects.RectangleObject.RectangleObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
 py3dengine.objects.SceneObject.SceneObject.updateMesh	py3dengine.objects.SceneObject.SceneObject-class.html#updateMesh
@@ -595,7 +595,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.SceneObject.SceneObject	py3dengine.objects.SceneObject.SceneObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
 py3dengine.objects.SceneObject.SceneObject.updateMesh	py3dengine.objects.SceneObject.SceneObject-class.html#updateMesh
@@ -619,7 +619,7 @@ py3dengine.objects.SceneObject.SceneObject.positionMatrix	py3dengine.objects.Sce
 py3dengine.objects.SceneObject.SceneObject.refraction	py3dengine.objects.SceneObject.SceneObject-class.html#refraction
 py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObject.SceneObject-class.html#position
 py3dengine.objects.TriangleObject.TriangleObject	py3dengine.objects.TriangleObject.TriangleObject-class.html
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
@@ -657,7 +657,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.WavefrontOBJSceneObject.WavefrontOBJSceneObject	py3dengine.objects.WavefrontOBJSceneObject.WavefrontOBJSceneObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
 py3dengine.objects.SceneObject.SceneObject.updateMesh	py3dengine.objects.SceneObject.SceneObject-class.html#updateMesh
@@ -685,7 +685,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.WavefrontObject.WavefrontObject	py3dengine.objects.WavefrontObject.WavefrontObject-class.html
 py3dengine.objects.SceneObject.SceneObject.cleanChilds	py3dengine.objects.SceneObject.SceneObject-class.html#cleanChilds
 py3dengine.objects.SceneObject.SceneObject.specularity	py3dengine.objects.SceneObject.SceneObject-class.html#specularity
-py3dengine.objects.SceneObject.SceneObject.addChild	py3dengine.objects.SceneObject.SceneObject-class.html#addChild
+py3dengine.objects.SceneObject.SceneObject.add_child	py3dengine.objects.SceneObject.SceneObject-class.html#add_child
 py3dengine.objects.SceneObject.SceneObject.color	py3dengine.objects.SceneObject.SceneObject-class.html#color
 py3dengine.objects.WavefrontObject.WavefrontObject.terrain	py3dengine.objects.WavefrontObject.WavefrontObject-class.html#terrain
 py3dengine.objects.SceneObject.SceneObject.parentObj	py3dengine.objects.SceneObject.SceneObject-class.html#parentObj
@@ -718,7 +718,7 @@ py3dengine.objects.SceneObject.SceneObject.position	py3dengine.objects.SceneObje
 py3dengine.objects.WavefrontObject.WavefrontObject.resolution	py3dengine.objects.WavefrontObject.WavefrontObject-class.html#resolution
 py3dengine.scenes.GLScene.GLScene	py3dengine.scenes.GLScene.GLScene-class.html
 py3dengine.scenes.Scene.Scene.getObject	py3dengine.scenes.Scene.Scene-class.html#getObject
-py3dengine.scenes.Scene.Scene.initHierarchy	py3dengine.scenes.Scene.Scene-class.html#initHierarchy
+py3dengine.scenes.Scene.Scene.set_hierarchy	py3dengine.scenes.Scene.Scene-class.html#set_hierarchy
 py3dengine.scenes.Scene.Scene.__init__	py3dengine.scenes.Scene.Scene-class.html#__init__
 py3dengine.scenes.Scene.Scene.synchronize	py3dengine.scenes.Scene.Scene-class.html#synchronize
 py3dengine.scenes.Scene.Scene.cameras	py3dengine.scenes.Scene.Scene-class.html#cameras
@@ -732,7 +732,7 @@ py3dengine.scenes.Scene.Scene.cameras	py3dengine.scenes.Scene.Scene-class.html#c
 py3dengine.scenes.Scene.Scene.getCamera	py3dengine.scenes.Scene.Scene-class.html#getCamera
 py3dengine.scenes.Scene.Scene.synchronize	py3dengine.scenes.Scene.Scene-class.html#synchronize
 py3dengine.scenes.Scene.Scene.objects	py3dengine.scenes.Scene.Scene-class.html#objects
-py3dengine.scenes.Scene.Scene.initHierarchy	py3dengine.scenes.Scene.Scene-class.html#initHierarchy
+py3dengine.scenes.Scene.Scene.set_hierarchy	py3dengine.scenes.Scene.Scene-class.html#set_hierarchy
 py3dengine.scenes.Scene.Scene.__init__	py3dengine.scenes.Scene.Scene-class.html#__init__
 py3dengine.scenes.SceneClient.SceneClient	py3dengine.scenes.SceneClient.SceneClient-class.html
 py3dengine.scenes.SceneClient.SceneClient.commit	py3dengine.scenes.SceneClient.SceneClient-class.html#commit
@@ -741,7 +741,7 @@ py3dengine.scenes.SceneClient.SceneClient.__init__	py3dengine.scenes.SceneClient
 py3dengine.scenes.SceneClient.SceneClient.synchronize	py3dengine.scenes.SceneClient.SceneClient-class.html#synchronize
 py3dengine.scenes.TriangulationGLScene.TriangulationGLScene	py3dengine.scenes.TriangulationGLScene.TriangulationGLScene-class.html
 py3dengine.scenes.Scene.Scene.getObject	py3dengine.scenes.Scene.Scene-class.html#getObject
-py3dengine.scenes.Scene.Scene.initHierarchy	py3dengine.scenes.Scene.Scene-class.html#initHierarchy
+py3dengine.scenes.Scene.Scene.set_hierarchy	py3dengine.scenes.Scene.Scene-class.html#set_hierarchy
 py3dengine.scenes.Scene.Scene.__init__	py3dengine.scenes.Scene.Scene-class.html#__init__
 py3dengine.scenes.Scene.Scene.synchronize	py3dengine.scenes.Scene.Scene-class.html#synchronize
 py3dengine.scenes.Scene.Scene.cameras	py3dengine.scenes.Scene.Scene-class.html#cameras

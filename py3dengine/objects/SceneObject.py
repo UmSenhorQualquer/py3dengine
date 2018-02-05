@@ -12,7 +12,7 @@ class SceneObject(object):
 
 	def __init__(self, name='Untitled'):
 
-		
+		self._parentObj     = None
 		self.parentObj 		= None
 		self.active 		= True
 		self.name 			= name
@@ -35,9 +35,14 @@ class SceneObject(object):
 		for child in self._childs: child.parentObj = None
 		self._childs = []
 
-	def addChild(self, child):
-		child.parentObj = self
+	def add_child(self, child):
+		child._parentObj = self
 		self._childs.append(child)
+
+	def remove_child(self, child):
+		child._parentObj = None
+		self._childs.remove(child)
+
 
 	
 	def updateMesh(self): pass
@@ -115,6 +120,9 @@ class SceneObject(object):
 	######## PROPERTIES ##############################################################################################
 	##################################################################################################################
 	@property
+	def childs(self): return self._childs
+
+	@property
 	def refraction(self): return self._refraction
 	@refraction.setter
 	def refraction(self, value):  self._refraction = value
@@ -149,8 +157,14 @@ class SceneObject(object):
 	@property
 	def parentObj(self): return self._parentObj
 	@parentObj.setter
-	def parentObj(self, value):  self._parentObj = value
-
+	def parentObj(self, value):
+		#remove from the old parent
+		if self._parentObj: self._parentObj.remove_child(self)
+		#add to the parent
+		if value:
+			value.add_child(self)
+		else:
+			self._parentObj = None
 
 
 	@property

@@ -18,7 +18,7 @@ from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJO
 class Scene(object):
 
 	def __init__(self):
-		self.selectedObject = None
+		self.selected_object = None
 		self._objects = []
 		self._cameras = []
 		
@@ -34,14 +34,14 @@ class Scene(object):
 			if name==obj.name: return obj
 		return None
 
-	def initHierarchy(self, value):
+	def set_hierarchy(self, value):
 		for o in value:
 			parentName = o.getProperty('parent', None)
 			objName = o.name
 			if parentName!=None:
 				parent 	= self.getObject(parentName)
 				obj 	= self.getObject(objName)
-				parent.addChild(obj)
+				parent.add_child(obj)
 
 	@property
 	def objects(self): return self._objects
@@ -71,7 +71,7 @@ class Scene(object):
 			else:
 				self._objects.append(o)
 
-		if from_WavefrontOBJObject: self.initHierarchy(value)
+		if from_WavefrontOBJObject: self.set_hierarchy(value)
 		
 
 
