@@ -233,7 +233,7 @@ class BaseCamera(object):
 		total = float(len(xsRange)*len(ysRange))-1.0
 
 		if not multipleprocessing:
-			img = np.zeros( (self.cameraHeight, self.cameraWidth, 3), dtype=np.uint8 )
+			img = np.zeros( ( int(self.cameraHeight), int(self.cameraWidth), 3), dtype=np.uint8 )
 			for i, (x,y) in enumerate(positions):
 				p0, p1 = self.pixelLinePoints(x,y)
 				ray = Ray(p0, p1, depth=0)
