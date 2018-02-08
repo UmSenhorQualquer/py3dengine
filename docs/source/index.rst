@@ -46,3 +46,18 @@ Ricardo Ribeiro                     from the `Champalimaud Scientific Software P
 
    getting-started/install
    getting-started/my-first-scene
+
+
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :includehidden:
+   :caption: API reference
+
+   api-reference/index
+   api-reference/bin
+   api-reference/cameras
+   api-reference/objects
+   api-reference/scenes
+   api-reference/utils

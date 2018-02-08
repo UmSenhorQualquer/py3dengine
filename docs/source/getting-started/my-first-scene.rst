@@ -19,12 +19,30 @@ Download the example: `material file <https://raw.githubusercontent.com/UmSenhor
 
     camera = scene.getCamera('Camera1')
 
-    ray     = camera1.addRay( 100, 100 )
-    x, y, z = ray.collidePlanZ(0); 
+    ray     = camera.addRay( 100, 100 )
+    collision = ray.collidePlanZ(0); 
+
+    print('Point of collision with the Z plain', collision)
 
     floor   = scene.getObject('Floor')
     collision = ray.collide([floor])
 
+    print('Point of collision with object Foor,', collision)
 
     run = RunScene(scene)
     run.startScene()
+
+
+
+Stdout output
+
+.. code-block:: bash
+
+    Collision with the Z plain (-15.97673643616865, -18.90785099921925, 0.0)
+    Collision with object Foor, (29.07119617403152, (-15.97673643616865, -18.90785099921925, 0.0), <py3dengine.objects.RectangleObject.RectangleObject object at 0x7f1198e7cac8>)
+
+
+Output scene window
+
+.. image:: /_static/example-result.png
+   :scale: 100 %

@@ -177,7 +177,7 @@ def server_handler():
 				sleep(0.33)
 		except: 
 			pass
-			print traceback.print_exc()
+			print(traceback.print_exc())
 			
 		print("Connection to", addr,"down")
 

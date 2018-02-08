@@ -38,7 +38,7 @@ tail.Rotate(angleY=np.pi/8)
 #tail.RotateY( np.pi/2)
 #print scene.cameras[0].calcPoint(100,100, 1)
 
-class RunScene(object):
+class RunSceneFile(object):
 
 	def __init__(self, scenefilename, videowriter=None):
 		self._windowSize 	= 640, 480
@@ -208,6 +208,6 @@ class RunScene(object):
 if __name__ == "__main__":
 	SCENE = '/home/ricardo/subversion/MEShTracker/Dolphin/DOLPHINS/13_02_2015/sceneWithPool2.obj'
 	
-	run = RunScene(SCENE)
+	run = RunSceneFile(SCENE)
 	run.startScene()
 

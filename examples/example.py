@@ -11,12 +11,15 @@ scene.cameras = w.cameras
 
 camera = scene.getCamera('Camera1')
 
-ray 	= camera1.addRay( 100, 100 )
-x, y, z = ray.collidePlanZ(0); 
+ray 	= camera.addRay( 100, 100 )
+collision = ray.collidePlanZ(0); 
+
+print('Point of collision with the Z plain', collision)
 
 floor	= scene.getObject('Floor')
 collision = ray.collide([floor])
 
+print('Point of collision with object Foor,', collision)
 
 run = RunScene(scene)
 run.startScene()
