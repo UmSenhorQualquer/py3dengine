@@ -1,0 +1,3 @@
+[submodule "pyOSC"]
+	path = pyOSC
+	url = https://github.com/UmSenhorQualquer/pyOSC.git
