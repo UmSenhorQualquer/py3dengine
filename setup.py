@@ -21,7 +21,6 @@ setup(
 	author_email		='ricardojvr@gmail.com',
 	license 			='MIT',
 
-	
 	packages=find_packages(),
 
 	entry_points={

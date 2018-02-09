@@ -1,5 +1,3 @@
-#!/usr/bin/env python2.7
-from __init__ import *
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
 from py3dengine.scenes.GLScene import GLScene

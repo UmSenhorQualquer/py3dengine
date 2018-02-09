@@ -1,4 +1,4 @@
-from __init__ import *
+
 import sys,cv2, numpy as np, os, sys, csv
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
