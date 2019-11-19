@@ -156,11 +156,16 @@ class Ray(object):
 
 
 	@staticmethod
-	def __FindClosestPointBetweenRays(ray0, ray1,clamp=True):
-		''' Given two lines defined by numpy.array pairs (a0,a1,b0,b1)
-		Return distance, and the two closest points
-		Use the clamp option to limit results to line segments
-		'''
+	def __find_closest_point_between_rays(ray0, ray1, clamp=True):
+		"""
+		Given two rays calculate the closest point, only for the main segment of each ray.
+		:param Ray ray0: Ray 0
+		:param Ray ray1: Ray 1
+		:param boolean clamp: Default: True. If true the result is given within the line segments
+		:return: (Distance between the 2 closest points, Point on ray0, Point on ray1, Middle point between the 2 closest points)
+		The closest points are within the rays boundaries.
+		"""
+
 		v0 = ray0.points
 		v1 = ray1.points
 
@@ -183,6 +188,7 @@ class Ray(object):
 		t1 = det1/denom;
 		pA = a0 + (_A * t0);
 		pB = b0 + (_B * t1);
+
 		# Clamp results to line segments if requested
 		if clamp:
 			if t0 < 0: pA = a0
@@ -190,7 +196,7 @@ class Ray(object):
 			if t1 < 0: pB = b0
 			elif t1 > np.linalg.norm(B): pB = b1
 		d = np.linalg.norm(pA-pB)
-		#return d,pA,pB, ( (pB[0]+pB[0])/2, (pA[1]+pB[1])/2, (pA[2]+pB[2])/2 )
+
 		return d,pA,pB, ( (pA[0]+pB[0])/2, (pA[1]+pB[1])/2, (pA[2]+pB[2])/2 )
 
 
@@ -198,11 +204,15 @@ class Ray(object):
 
 
 	@staticmethod
-	def FindClosestPointBetweenRays(ray0, ray1):
-		''' Given two lines defined by numpy.array pairs (a0,a1,b0,b1)
-	    Return distance, and the two closest points
-	    Use the clamp option to limit results to line segments
-		'''
+	def find_closest_point(ray0, ray1):
+		"""
+		Given two rays calculate the closest points, including the child rays that can exists due to refraction.
+
+		:param Ray ray0: Ray 0
+		:param Ray ray1: Ray 1
+		:return: (Distance between the 2 closest points, Point on ray0, Point on ray1, Middle point between the 2 closest points)
+		The closest points are within the rays segments.
+		"""
 		rays0 = []
 		rays1 = []
 
@@ -211,9 +221,10 @@ class Ray(object):
 
 		results = []
 		for ray0, ray1 in itertools.product(rays0, rays1):
-			res = Ray.__FindClosestPointBetweenRays(ray0, ray1)
+			res = Ray.__find_closest_point_between_rays(ray0, ray1)
 			results.append( res )
 
-		if len(results)==0: return None
+		if len(results)==0:
+			return None
 		results = sorted(results, key=lambda x:x[0])
 		return results[0]
