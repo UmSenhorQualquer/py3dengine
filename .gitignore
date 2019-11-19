@@ -2,3 +2,5 @@
 *.pyc
 
 docs/build/
+
+py3dengine.egg-info/
