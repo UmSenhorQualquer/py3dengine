@@ -106,8 +106,8 @@ def keyPressed(*args):
 	global scene, infile, windowSize
 
 	# If escape is pressed, kill everything.
-	if args[0] == '\033': sys.exit()
-	if args[0] == 'f': glutFullScreen()
+	if args[0] == b'\033': sys.exit()
+	if args[0] == b'f': glutFullScreen()
 
 
 def onMouseHandler(button, state, x, y):

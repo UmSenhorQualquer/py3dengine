@@ -110,10 +110,10 @@ class RunScene(object):
 
 	# The function called whenever a key is pressed. Note the use of Python tuples to pass in: (key, x, y)
 	def keyPressed(self, *args):
-		
+
 		# If escape is pressed, kill everything.
-		if args[0] == '\033': sys.exit()
-		if args[0] == 'f':
+		if args[0] == b'\033': sys.exit()
+		if args[0] == b'f':
 			if not self._fullsceen: 
 				glutFullScreen()
 				self._fullsceen = True
