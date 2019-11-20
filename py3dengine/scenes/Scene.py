@@ -17,10 +17,10 @@ from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJO
 
 class Scene(object):
 
-	def __init__(self):
+	def __init__(self, describer=None):
 		self.selected_object = None
-		self._objects = []
-		self._cameras = []
+		self.objects = describer.objects if describer is not None else []
+		self.cameras = describer.cameras if describer is not None else []
 		
 	def synchronize(self):pass
 
@@ -43,9 +43,9 @@ class Scene(object):
 				obj 	= self.getObject(objName)
 				parent.add_child(obj)
 
-	def add_point(self, p, name=None):
+	def add_point(self, p, name=None, color=None):
 		self._objects.append(
-			PointObject(f'point-{len(self._objects)}', p)
+			PointObject(f'point-{len(self._objects)}', p, color=color)
 		)
 
 	@property

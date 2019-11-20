@@ -6,8 +6,8 @@ from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJO
 
 class SceneClient(GLScene):
 
-	def __init__(self, host):
-		super(SceneClient, self).__init__()
+	def __init__(self, host, describer=None):
+		super(SceneClient, self).__init__(describer=describer)
 		self._host = host
 		self.__try_connection()
 
@@ -15,7 +15,8 @@ class SceneClient(GLScene):
 		try:
 			self._client = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 			self._client.connect ( self._host )
-		except:
+		except Exception as e:
+			traceback.print_exc()
 			print('No server available')
 			self._last_try = time.time()
 			self._client = None
@@ -27,8 +28,8 @@ class SceneClient(GLScene):
 		if self._client:
 			
 			data = pickle.dumps(self)
-			self._client.send('update-scene')
-			self._client.send(str(len(data)).zfill(30) )
+			self._client.send(b'update-scene')
+			self._client.send(f'{len(data)}'.zfill(30).encode())
 			self._client.send(data)
 
 		#If there is no connection available try it every 5 seconds

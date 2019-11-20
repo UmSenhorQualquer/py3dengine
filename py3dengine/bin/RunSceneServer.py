@@ -6,13 +6,13 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 from time import sleep
-import sys, cv2, types, numpy as np, pickle, socket, thread, argparse, atexit, traceback
+import sys, cv2, types, numpy as np, pickle, socket, _thread, argparse, atexit, traceback
 
 
 server_socket = None
 scene 		= GLScene()
 windowSize 	= 640, 480
-rotation 	= [-67.49999999999994, 0, -71.99999999999997]
+rotation 	= [-67.49999999999994, -180, -71.99999999999997]
 zoom 		= 9
 mouseButton = 1
 mouseState 	= 1
@@ -163,11 +163,12 @@ def server_handler():
 			while True:
 				command = conn.recv(12)
 
-				if command=='update-scene':
+				if command==b'update-scene':
 					nbytes 	= int(conn.recv(30))
-					data 	= ''
+					data 	= b''
 					while len(data)<nbytes: data += conn.recv(nbytes)
 					scene 	= pickle.loads(data)
+					print(scene)
 					command = ''
 				elif not command:
 					conn.close()
@@ -195,7 +196,7 @@ def main():
 	server_socket = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 	server_socket.bind( (args.server_address, args.server_port) )
 	server_socket.listen(1)
-	thread.start_new_thread(server_handler, ())
+	_thread.start_new_thread(server_handler, ())
 	#################################################################
 
 	#################################################################

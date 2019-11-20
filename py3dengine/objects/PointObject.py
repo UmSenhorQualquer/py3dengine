@@ -14,8 +14,8 @@ class PointObject(WavefrontOBJSceneObject):
 
 	_type = 'PointObject'
 
-	def __init__(self, name='Untitled', p0=(0.0, 0.0,0.0)):
-		WavefrontOBJSceneObject.__init__(self,name)
+	def __init__(self, name='Untitled', p0=(0.0, 0.0,0.0), color=None):
+		WavefrontOBJSceneObject.__init__(self,name, color=color)
 		self._radius = 10.0
 		self._point = p0
 

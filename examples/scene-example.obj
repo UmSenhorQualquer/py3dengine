@@ -1,0 +1,61 @@
+﻿mtllib 04Hugo201302211037_Scenario.mtl
+
+o Camera1
+usemtl Camera1Material
+v -0.638353000 1.032995000 2.996262000
+# type: Camera
+# cameraMatrix: [616.835, 0.0, 424.0, 0.0, 616.637, 240.0, 0.0, 0.0, 1.0]
+# cameraDistortion: 0.0,0.0,0.0,0.0,0.0
+# rotationVector: -2.858841896057129,0.9261879920959473,0.1424580067396164
+# maxFocalLength: 1
+# cameraWidth: 848.0
+# cameraHeight: 480.0
+# showFaces: True
+# videofile: /media/NAS/PeopleDetection/up_realsense_frames/Data_Pipe/AVI/382_cam_1.avi
+# visible: True
+# nrays: 0
+
+o Camera2
+usemtl Camera2Material
+v -1.104238000 -0.577161000 2.960964000
+# type: Camera
+# cameraMatrix: [616.835, 0.0, 424.0, 0.0, 616.637, 240.0, 0.0, 0.0, 1.0]
+# cameraDistortion: 0.0,0.0,0.0,0.0,0.0
+# rotationVector: 0.5468379855155945,3.0876240730285645,0.02794099971652031
+# maxFocalLength: 1
+# cameraWidth: 848.0
+# cameraHeight: 480.0
+# showFaces: True
+# videofile: /media/NAS/PeopleDetection/up_realsense_frames/Data_Pipe/AVI/382_cam_2.avi
+# visible: True
+# nrays: 0
+
+o Floor
+usemtl FloorMaterial
+v 5.000000000 -5.000000000 0.000000000
+v -5.000000000 -5.000000000 0.000000000
+v -5.000000000 5.000000000 0.000000000
+v 5.000000000 5.000000000 0.000000000
+f 3 4 5 6
+# position: 0,0,0
+# centerOfMass: 0.0,0.0,0.0
+# rotation: 0.0,1.0,0.0,0.0
+# active: True
+# refraction: None
+# type: RectangleObject
+
+o Calibration polygon
+usemtl Calibration polygonMaterial
+v 0.000000000 0.000000000 0.000000000
+v 0.093000000 0.000000000 0.000000000
+v 0.093000000 0.070000000 0.000000000
+v 0.023000000 0.070000000 0.000000000
+v 0.000000000 0.093000000 0.000000000
+f 7 8 9 10 11
+# position: 0,0,0
+# centerOfMass: 0,0,0
+# rotation: 0,1,0,0
+# active: True
+# refraction: None
+# type: MarkerObject
+

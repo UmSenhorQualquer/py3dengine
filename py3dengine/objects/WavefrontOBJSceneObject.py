@@ -4,7 +4,8 @@ from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJO
 
 class WavefrontOBJSceneObject(SceneObject):
 
-	def __init__(self, name='Untitled'): SceneObject.__init__(self,name)
+	def __init__(self, name='Untitled', color=None):
+		SceneObject.__init__(self,name, color=color)
 
 
 	def afterLoadSceneObject(self):

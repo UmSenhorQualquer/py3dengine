@@ -10,13 +10,13 @@ except:
 
 class SceneObject(object):
 
-	def __init__(self, name='Untitled'):
+	def __init__(self, name='Untitled', color=None):
 
 		self._parentObj     = None
 		self.parentObj 		= None
 		self.active 		= True
 		self.name 			= name
-		self.color 			= 0,0,1,1
+		self.color 			= (0,0,1,1) if color is None else color
 		self._incandescence = None
 		self._specularity 	= None
 		self._reflectivity 	= None
