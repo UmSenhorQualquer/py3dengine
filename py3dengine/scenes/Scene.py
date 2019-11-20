@@ -43,6 +43,11 @@ class Scene(object):
 				obj 	= self.getObject(objName)
 				parent.add_child(obj)
 
+	def add_point(self, p, name=None):
+		self._objects.append(
+			PointObject(f'point-{len(self._objects)}', p)
+		)
+
 	@property
 	def objects(self): return self._objects
 	@objects.setter

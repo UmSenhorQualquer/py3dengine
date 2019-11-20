@@ -24,15 +24,13 @@ class GLScene(Scene):
 
 	# The main drawing function.
 	def DrawGLScene(self):
-		cameras = self.cameras
-		objects = self.objects
-		
+
 		if self.selected_object!=None: self.selected_object.lookFrom()
 		
 		#self.__drawGLAxis()
 
 		for cam in self.cameras:
 			cam.DrawGL();
-		for obj in objects: 
+		for obj in self.objects:
 			if obj.active: obj.DrawGL();
 
