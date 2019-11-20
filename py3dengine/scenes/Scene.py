@@ -19,8 +19,16 @@ class Scene(object):
 
 	def __init__(self, describer=None):
 		self.selected_object = None
-		self.objects = describer.objects if describer is not None else []
-		self.cameras = describer.cameras if describer is not None else []
+
+		if describer is not None:
+			self.objects = describer.objects
+		else:
+			self._objects = []
+
+		if describer is not None:
+			self.cameras = describer.cameras
+		else:
+			self._cameras = []
 		
 	def synchronize(self):pass
 
