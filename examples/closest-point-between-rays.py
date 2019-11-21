@@ -10,7 +10,7 @@ from py3dengine.scenes.Scene import Scene
 from py3dengine.cameras.Ray import Ray
 
 # Load the scene from a file
-w = WavefrontOBJReader('scene-example.obj')
+w = WavefrontOBJReader('data/scene-example.obj')
 
 # Initialize the scene
 scene = Scene(describer=w)

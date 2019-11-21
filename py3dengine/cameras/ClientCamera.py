@@ -14,9 +14,9 @@ class ClientCamera(Camera):
 	def cleanRays(self):
 		super(ClientCamera,self).cleanRays()
 
-		msg = self.client.msg
-		msg.append( 'cleanRays' )
-		msg.append( self.name )
+		#msg = self.client.msg
+		#msg.append( 'cleanRays' )
+		#msg.append( self.name )
 
 
 	####################################################################

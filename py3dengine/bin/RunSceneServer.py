@@ -168,7 +168,6 @@ def server_handler():
 					data 	= b''
 					while len(data)<nbytes: data += conn.recv(nbytes)
 					scene 	= pickle.loads(data)
-					print(scene)
 					command = ''
 				elif not command:
 					conn.close()

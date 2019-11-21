@@ -15,14 +15,12 @@ from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJR
 from py3dengine.cameras.Ray import Ray
 from py3dengine.scenes.SceneClient import SceneClient
 
-w = WavefrontOBJReader('scene-example.obj')
+w = WavefrontOBJReader('data/scene-example.obj')
 
 scene = SceneClient(('127.0.0.1', 5005), describer=w )
 
 cam1 = scene.getCamera('Camera1')
 cam2 = scene.getCamera('Camera2')
-
-floor = scene.getObject('Floor')
 
 ray1 = cam1.addRay(500, 400)
 ray2 = cam2.addRay(500, 450)

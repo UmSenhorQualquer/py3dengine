@@ -11,7 +11,7 @@ from py3dengine.cameras.Ray import Ray
 from py3dengine.scenes.GLScene import GLScene
 from py3dengine.bin.RunScene import RunScene
 
-w = WavefrontOBJReader('scene-example.obj')
+w = WavefrontOBJReader('data/scene-example.obj')
 
 scene = GLScene(describer=w)
 
