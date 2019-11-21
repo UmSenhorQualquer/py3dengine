@@ -100,7 +100,7 @@ class WavefrontObject(WavefrontOBJSceneObject):
 
 		glColor4f(*self.color)
 
-		self.drawCenterOfMass()
+		#self.drawCenterOfMass()
 		glEnableClientState(GL_VERTEX_ARRAY)
 		glVertexPointer(3, GL_FLOAT, 0, self._points)
 		glDrawElements( GL_TRIANGLES, len(self._indexes), GL_UNSIGNED_SHORT, self._indexes)

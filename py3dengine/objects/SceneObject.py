@@ -109,7 +109,7 @@ class SceneObject(object):
 		glPopMatrix()
 
 	def DrawGL(self): 
-		self.drawCenterOfMass()
+		#self.drawCenterOfMass()
 		#for x in self._childs: x.DrawGL()
 		pass
 

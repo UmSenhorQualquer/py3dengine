@@ -56,6 +56,9 @@ class Scene(object):
 			PointObject(f'point-{len(self._objects)}', p, color=color)
 		)
 
+	def add_object(self,obj):
+		self._objects.append(obj)
+
 	@property
 	def objects(self): return self._objects
 	@objects.setter
