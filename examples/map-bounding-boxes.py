@@ -59,6 +59,12 @@ class MapBoundingBoxesApp(BaseWidget):
         self._video1.value = '/Users/ricardojvr/Downloads/376_cam_1.avi'
         self._video2.value = '/Users/ricardojvr/Downloads/376_cam_2.avi'
 
+        self._video1.value = '/Users/ricardojvr/Downloads/tracking/385_cam_1.avi'
+        self._video2.value = '/Users/ricardojvr/Downloads/tracking/385_cam_2.avi'
+        self._data1.value = '/Users/ricardojvr/Downloads/tracking/385_cam_1_detection.csv'
+        self._data2.value = '/Users/ricardojvr/Downloads/tracking/385_cam_2_detection.csv'
+
+
 
     def __process_player1_frame(self, frame):
         index = self._player1.video_index-1
@@ -139,6 +145,14 @@ class MapBoundingBoxesApp(BaseWidget):
         self.cam1.cleanRays()
         self.cam2.cleanRays()
         self.scene.objects = [self.floor] if self.floor else []
+        obj = RectangleObject(f'plane-{len(self.scene.objects)}',
+            (-5, -5,1.8),
+            (-5, 5, 1.8),
+            (5, 5, 1.8),
+            (5, -5, 1.8),
+         )
+        self.scene.add_object(obj)
+        obj.color = (0.5,0,0,0.3)
 
     def init_scene(self):
         self.scene = SceneClient(self.SERVER_ADDRESS, describer=WavefrontOBJReader(self._scene.value))

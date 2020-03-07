@@ -104,6 +104,10 @@ class CylinderObject(WavefrontOBJSceneObject):
 			if abs(np.dot(A-P, vc1)) <= .01: return True;
 		return False
 
+	def normalizedVector(self, a, b):
+		v = np.array([b[0]-a[0],b[1]-a[1],b[2]-a[2]])
+		return v/np.linalg.norm(v)
+
 	def collide_with_ray(self, ray):
 		p0 = ray.points[0]
 		p1 = ray.points[1]

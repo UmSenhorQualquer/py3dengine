@@ -9,9 +9,8 @@ except:
 
 class MarkerObject(RectangleObject):
 
-	def __init__(self, name='Untitled', 
-		p0=(0,0,0), p1=(1,0,0), p2=(1,0,1), p3=(0,0,1), p4=(0,1,1)):
-		super(MarkerObject,self).__init__(name, p0, p1, p2, p3)
+	def __init__(self, name='Untitled', p0=[0, 0, 0], p1=[1, 0, 0], p2=[1, 0, 1], p3=[0, 0, 1], p4=[0, 1, 1]):
+		super(MarkerObject, self).__init__(name, p0, p1, p2, p3)
 
 		self.point4 = p4
 

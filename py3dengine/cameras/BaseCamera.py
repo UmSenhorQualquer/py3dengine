@@ -127,7 +127,8 @@ class BaseCamera(object):
 	def position(self, value):
 		if isinstance(value, tuple) or isinstance(value, list): 
 			self._tvecs = np.matrix([list(value)])
-		else: self._tvecs = value
+		else:
+			self._tvecs = value
 
 	@property
 	def rotationVector(self): return self._rvecs
