@@ -99,10 +99,11 @@ class Ray(object):
 			return x,y,z
 		
 	def collide(self, objects):
+
 		collisions = []
 		for obj in objects:
 			collision = obj.collide_with_ray(self)
-			if collision!=None:
+			if collision is not None:
 				b, normal = collision
 				dist = lin3d_distance(self._a, b)
 				collisions.append( (dist, b, normal, obj) )
@@ -112,22 +113,26 @@ class Ray(object):
 			dist, b, normal, obj = collisions[0]
 			self._b = b
 
-
 			self.color = obj.color
 
 			#############################################
 			#Reflect or refract image
-			if self._depth>0 and obj.refraction!=None:
-				if obj.refraction==None:
-					i = self.vector; n = normal; r = i-(n*2*np.dot(i,n)); c = np.array(b)+r
+			if self._depth > 0:
+				if obj.refraction is None:
+					i = self.vector
+					n = normal
+					r = i-(n*2*np.dot(i, n))
+					c = np.array(b)+r
 				else:
 					c = self.fresnel_refraction(normal, n2=obj.refraction)*10
 					c += b
 
-				if self.children!=None: self.children.points = [b, c]
-				else: self.children = Ray(b, c, depth=self._depth-1)
+				if self.children is not None:
+					self.children.points = [b, c]
+				else:
+					self.children = Ray(b, c, depth=self._depth-1)
 
-				if obj.refraction!=None: 
+				if obj.refraction is not None:
 					objs = [o for o in objects if o!=obj]
 					self.children.collide(objs)
 			else:

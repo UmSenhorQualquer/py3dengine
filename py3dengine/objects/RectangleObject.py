@@ -4,6 +4,8 @@ import numpy as np
 
 class RectangleObject(WavefrontOBJSceneObject):
 
+	_type = 'RectangleObject'
+
 	def __init__(self, name='Untitled', 
 		p0=(0,0,0), p1=(1,0,0), p2=(1,0,1), p3=(0,0,1)):
 		
@@ -70,7 +72,7 @@ class RectangleObject(WavefrontOBJSceneObject):
 	def wavefrontobject(self):
 		obj = super(RectangleObject, self).wavefrontobject
 		
-		obj.addProperty('type', 'RectangleObject')
+		obj.addProperty('type', self._type)
 		obj.addVertice( self.point0 )
 		obj.addVertice( self.point1 )
 		obj.addVertice( self.point2 )
