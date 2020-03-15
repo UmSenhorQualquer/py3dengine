@@ -2,7 +2,7 @@
 if __name__ == '__build__': raise Exception
 
 from OSC import OSCServer, OSCClient, OSCMessage
-from py3dengine.cameras.Camera import Camera
+from py3dengine.cameras.camera import Camera
 
 class ClientCamera(Camera):
 

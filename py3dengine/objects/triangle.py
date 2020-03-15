@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -10,19 +12,31 @@ from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
-class TriangleObject(WavefrontOBJSceneObject):
+class TriangleObject(SceneObject):
 
-	_type = 'TriangleObject'
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-	def __init__(self, name='Untitled', 
-		p0=(-20.0, 0.0, -20.0), p1=(20, 0.0, -20.0),p2=(20, 0.0, 20)):
-		WavefrontOBJSceneObject.__init__(self,name)
+		self._point0 = kwargs.get('p0', (-20.0, 0.0, -20.0))
+		self._point1 = kwargs.get('p1', (20, 0.0, -20.0))
+		self._point2 = kwargs.get('p2', (20, 0.0, 20))
 
-		self._point0 = p0
-		self._point1 = p1
-		self._point2 = p2
 		self.__calculatePlane()
 
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj.point0 = json.get('point0')
+		obj.point1 = json.get('point1')
+		obj.point2 = json.get('point2')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['point0'] = self.point0
+		data['point1'] = self.point1
+		data['point2'] = self.point2
+		return data
 		
 	def __calculatePlane(self):
 		ax, ay, az = self._point0

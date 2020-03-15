@@ -1,12 +1,11 @@
 from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from py3dengine.objects.TriangleObject import TriangleObject
+from py3dengine.objects.triangle import TriangleObject
 import numpy as np, math
-from .RectangleObject import RectangleObject
-from ..cameras.Ray import Ray
+from py3dengine.objects.rectangle import RectangleObject
+from py3dengine.cameras.ray import Ray
 
 
 class RectangularLightObject(RectangleObject):
-    _type = 'RectangularLightObject'
 
     def __init__(self,
                  name='Untitled',

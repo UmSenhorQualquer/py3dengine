@@ -1,7 +1,7 @@
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.scenes.GLScene import GLScene
-from py3dengine.cameras.Ray import Ray
+from py3dengine.scenes.glscene import GLScene
+from py3dengine.cameras.ray import Ray
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *

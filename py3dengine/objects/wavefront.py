@@ -1,6 +1,6 @@
 from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 from py3dengine.utils.WavefrontFileLoader import WavefrontFileLoader
-from py3dengine.objects.TriangleObject import TriangleObject
+from py3dengine.objects.triangle import TriangleObject
 import math, cv2, numpy as np
 try:
 	from OpenGL.GL import *
@@ -24,6 +24,18 @@ class WavefrontObject(WavefrontOBJSceneObject):
 		
 		super(WavefrontObject,self).__init__(name)
 
+	@classmethod
+	def from_json(cls, json):
+		obj = cls()
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['_terrain'] = self.terrain
+		data['_resolution'] = self.resolution
+		data['_amplitude'] = self.amplitude
+		data['_terrainFile'] = self._terrainFile
+		return data
 
 	def __createTerrain(self, resolution, terrainMap=None, amplitude=100.0):
 		
@@ -76,9 +88,9 @@ class WavefrontObject(WavefrontOBJSceneObject):
 
 	def updateMesh(self):
 		if len(self._originals)>0:
-			Tmass 	= self.centerOfMassMatrix
-			T 		= self.positionMatrix
-			R 		= self.rotationMatrix
+			Tmass 	= self.center_of_mass_matrix
+			T 		= self.position_matrix
+			R 		= self.rotation_matrix
 			
 			self._points = np.array( (np.matrix(self._originals)-Tmass)*R+T )
 			self.__calculateTriangles()
@@ -100,7 +112,7 @@ class WavefrontObject(WavefrontOBJSceneObject):
 
 		glColor4f(*self.color)
 
-		#self.drawCenterOfMass()
+		#self.drawcenter_of_mass()
 		glEnableClientState(GL_VERTEX_ARRAY)
 		glVertexPointer(3, GL_FLOAT, 0, self._points)
 		glDrawElements( GL_TRIANGLES, len(self._indexes), GL_UNSIGNED_SHORT, self._indexes)

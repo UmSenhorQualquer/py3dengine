@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -10,14 +12,27 @@ from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
-class PointObject(WavefrontOBJSceneObject):
+class PointObject(SceneObject):
 
-	_type = 'PointObject'
+	def __init__(self, *args, **kwargs):
 
-	def __init__(self, name='Untitled', p0=(0.0, 0.0,0.0), color=None):
-		WavefrontOBJSceneObject.__init__(self,name, color=color)
-		self._radius = 10.0
-		self._point = p0
+		self._radius = kwargs.get('radius', 10.0)
+		self._point = kwargs.get('p0', 1.0)
+
+		super().__init__(*args, **kwargs)
+
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj.point = json.get('point')
+		obj._radius = json.get('radius')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['radius'] = self._radius
+		data['point'] = self.point
+		return data
 
 	@property
 	def point(self): return self._point

@@ -20,6 +20,22 @@ class Ray(object):
 		self._depth 	= depth #How many rays can be calculated after a collision
 		self.children 	= None  #Ray reflected or refracted from a collision
 
+	@classmethod
+	def from_json(cls, json):
+		obj = cls()
+		return obj
+
+	def to_json(self, data={}):
+
+		p0, p1 = self.points
+		data['p0'] = p0
+		data['p1'] = p1
+		data['color'] = self.color
+		data['ray-depth'] = self.raydepth
+		data['children'] = self.children.to_json() if (self.children is not None) else None
+
+		return data
+
 	@property
 	def vector(self): return np.array([self._b[0]-self._a[0], self._b[1]-self._a[1], self._b[2]-self._a[2]])
 

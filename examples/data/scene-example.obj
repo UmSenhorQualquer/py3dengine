@@ -38,7 +38,7 @@ v -5.000000000 5.000000000 0.000000000
 v 5.000000000 5.000000000 0.000000000
 f 3 4 5 6
 # position: 0,0,0
-# centerOfMass: 0.0,0.0,0.0
+# center_of_mass: 0.0,0.0,0.0
 # rotation: 0.0,1.0,0.0,0.0
 # active: True
 # refraction: None
@@ -53,7 +53,7 @@ v 0.023000000 0.070000000 0.000000000
 v 0.000000000 0.093000000 0.000000000
 f 7 8 9 10 11
 # position: 0,0,0
-# centerOfMass: 0,0,0
+# center_of_mass: 0,0,0
 # rotation: 0,1,0,0
 # active: True
 # refraction: None

@@ -1,7 +1,7 @@
 import cv2
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.scenes.Scene import Scene
-from py3dengine.bin.RunScene import RunScene
+from py3dengine.scenes.scene import Scene
+from py3dengine.bin.run_scene import RunScene
 
 SCENE = '..\\..\\py3DSceneEditor\\py3DSceneEditor\\scene.obj'
 

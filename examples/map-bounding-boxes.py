@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import cv2
-from py3dengine.objects.RectangleObject import RectangleObject
+from py3dengine.objects.rectangle import RectangleObject
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.scenes.SceneClient import SceneClient
+from py3dengine.scenes.scene_client import SceneClient
 from pyforms_gui.basewidget import BaseWidget
 from pyforms_gui.controls.control_button import ControlButton
 from pyforms_gui.controls.control_file import ControlFile

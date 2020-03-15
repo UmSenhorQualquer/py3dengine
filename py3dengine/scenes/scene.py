@@ -1,17 +1,17 @@
-from py3dengine.cameras.Camera 			import Camera
-from py3dengine.objects.MarkerObject 	import MarkerObject
-from py3dengine.objects.RectangleObject import RectangleObject
-from py3dengine.objects.TriangleObject 	import TriangleObject
-from py3dengine.objects.SceneObject 	import SceneObject
-from py3dengine.objects.TriangleObject 	import TriangleObject
-from py3dengine.objects.PointObject 	import PointObject
-from py3dengine.objects.RectangleObject import RectangleObject
-from py3dengine.objects.EllipsoidObject import EllipsoidObject
-from py3dengine.objects.MarkerObject 	import MarkerObject
-from py3dengine.objects.EllipseObject 	import EllipseObject
-from py3dengine.objects.CylinderObject 	import CylinderObject
-from py3dengine.objects.PlaneObject 	import PlaneObject
-from py3dengine.objects.WavefrontObject import WavefrontObject
+from py3dengine.cameras.camera 			import Camera
+from py3dengine.objects.marker 	import MarkerObject
+from py3dengine.objects.rectangle import RectangleObject
+from py3dengine.objects.triangle 	import TriangleObject
+from py3dengine.objects.base_object 	import SceneObject
+from py3dengine.objects.triangle 	import TriangleObject
+from py3dengine.objects.point 	import PointObject
+from py3dengine.objects.rectangle import RectangleObject
+from py3dengine.objects.ellipsoid import EllipsoidObject
+from py3dengine.objects.marker 	import MarkerObject
+from py3dengine.objects.ellipse 	import EllipseObject
+from py3dengine.objects.cylinder 	import CylinderObject
+from py3dengine.objects.plane 	import PlaneObject
+from py3dengine.objects.wavefront import WavefrontObject
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
 
 
@@ -29,6 +29,34 @@ class Scene(object):
 			self.cameras = describer.cameras
 		else:
 			self._cameras = []
+
+	@classmethod
+	def from_json(cls, json):
+		obj = cls()
+
+		for data in json.get('objects'):
+			obj.objects.append(
+				eval(data['type']).from_json(data)
+			)
+
+		for data in json.get('cameras'):
+			obj.cameras.append(
+				eval(data['type']).from_json(data)
+			)
+
+		return obj
+
+	def to_json(self, data={}):
+
+		data['objects'] = []
+		for o in self.objects:
+			data['objects'].append(o.to_json())
+
+		data['cameras'] = []
+		for c in self.cameras:
+			data['cameras'].append(c.to_json())
+
+		return data
 		
 	def synchronize(self):pass
 

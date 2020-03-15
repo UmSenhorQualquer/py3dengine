@@ -6,8 +6,8 @@ This script loads a scene and calculate the closest point between 2 rays traced 
 """
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.scenes.Scene import Scene
-from py3dengine.cameras.Ray import Ray
+from py3dengine.scenes.scene import Scene
+from py3dengine.cameras.ray import Ray
 
 # Load the scene from a file
 w = WavefrontOBJReader('data/scene-example.obj')

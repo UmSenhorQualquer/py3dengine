@@ -1,4 +1,4 @@
-from py3dengine.cameras.Ray import Ray
+from py3dengine.cameras.ray import Ray
 
 class PhysicsFromCamera(object):
 

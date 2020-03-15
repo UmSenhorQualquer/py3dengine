@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -11,20 +13,26 @@ from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
-class CircleObject(WavefrontOBJSceneObject):
+class CircleObject(SceneObject):
 
-	_type = 'CircleObject'
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-	def __init__(self, name='Untitled', fA=1.0, fB=1.0):
-
-		self._position = [0.0, 0.0, 0.0]
-		self._fa = fA
-		self._fb = fB
-
-		WavefrontOBJSceneObject.__init__(self, name)
+		self._fa = kwargs.get('fA', 1.0)
+		self._fb = kwargs.get('fB', 1.0)
 
 		self.__calculate_plane()
 
+	@classmethod
+	def from_json(cls, json):
+		obj = cls()
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['fa'] = self.fA
+		data['fb'] = self.fB
+		return data
 		
 	def __calculate_plane(self):
 		self._points = []
@@ -84,9 +92,9 @@ class CircleObject(WavefrontOBJSceneObject):
 		p0 = ray.points[0]
 		p1 = ray.points[1]
 
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		#Apply the inverse transformations of the Ellipse to the ray points
 		p0 = x0, y0, z0 = np.array( (np.matrix(p0)-T)*R.T+Tmass )[0]

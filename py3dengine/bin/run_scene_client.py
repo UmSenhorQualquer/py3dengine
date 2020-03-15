@@ -3,7 +3,7 @@
 import sys,cv2, numpy as np, os, sys, csv
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.scenes.SceneClient import SceneClient
+from py3dengine.scenes.scene_client import SceneClient
 
 
 #PARAMETERS

@@ -7,9 +7,9 @@ At the end displays the 3D scene in a window for debugging.
 """
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.cameras.Ray import Ray
-from py3dengine.scenes.GLScene import GLScene
-from py3dengine.bin.RunScene import RunScene
+from py3dengine.cameras.ray import Ray
+from py3dengine.scenes.glscene import GLScene
+from py3dengine.bin.run_scene import RunScene
 
 w = WavefrontOBJReader('data/scene-example.obj')
 

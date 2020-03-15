@@ -1,5 +1,5 @@
 from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from py3dengine.objects.RectangleObject import RectangleObject
+from py3dengine.objects.rectangle import RectangleObject
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -9,10 +9,21 @@ except:
 
 class MarkerObject(RectangleObject):
 
-	def __init__(self, name='Untitled', p0=[0, 0, 0], p1=[1, 0, 0], p2=[1, 0, 1], p3=[0, 0, 1], p4=[0, 1, 1]):
-		super(MarkerObject, self).__init__(name, p0, p1, p2, p3)
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-		self.point4 = p4
+		self.point4 = kwargs.get('p4', [0, 1, 1])
+
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj.point4 = json.get('point4')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['point4'] = self.point4
+		return data
 
 	@property
 	def point4(self): return self._point4

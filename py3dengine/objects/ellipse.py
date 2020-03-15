@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -11,20 +13,30 @@ from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
-class EllipseObject(WavefrontOBJSceneObject):
+class EllipseObject(SceneObject):
 
-	_type = 'EllipseObject'
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
 
-	def __init__(self, name='Untitled', fA=1.0, fB=1.0):
-		WavefrontOBJSceneObject.__init__(self,name)
+		self._fa = kwargs.get('fA', 1.0)
+		self._fb = kwargs.get('fB', 1.0)
 
-		self._position = (0.0,0.0,0.0)
-		self._fa = fA
-		self._fb = fB
 		self._points = []
 		self.__calculatePlane()
 
-		
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj.fA = json.get('fa')
+		obj.fB = json.get('fb')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['fa'] = self.fA
+		data['fb'] = self.fB
+		return data
+
 	def __calculatePlane(self):
 		self._points = []
 		

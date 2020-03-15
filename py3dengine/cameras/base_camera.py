@@ -1,6 +1,6 @@
 #!/usr/bin/env pythonw
 import cv2, math, numpy as np, itertools, sys
-from py3dengine.cameras.Ray import Ray
+from py3dengine.cameras.ray import Ray
 
 try: from multiprocessing import Pool
 except: print('No multiprocessing library')
@@ -30,7 +30,20 @@ class BaseCamera(object):
 		if cameraMatrix!=None:   	self.cameraMatrix 		= cameraMatrix
 		if cameraDistortion!=None: 	self.cameraDistortion 	= cameraDistortion
 		
-		
+
+	def to_json(self, data={}):
+
+		data['name'] = self.name
+		data['position'] = self.position
+		data['rotation-vector'] = self.rotationVector
+		data['max-focal-length'] = self.maxFocalLength
+		data['width'] = self.cameraWidth
+		data['height'] = self.cameraHeight
+		data['camera-matrix'] = self.cameraMatrix
+		data['camera-distortion'] = self.cameraDistortion
+		data['rays'] = [r.to_json() for r in self.rays]
+
+		return data
 		
 	
 	####################################################################################

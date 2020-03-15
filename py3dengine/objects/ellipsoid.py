@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -10,19 +12,32 @@ from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
-class EllipsoidObject(WavefrontOBJSceneObject):
+class EllipsoidObject(SceneObject):
 
-	_type = 'EllipsoidObject'
-
-	def __init__(self, name='Untitled', fA=1.0, fB=1.0, fC=1.0):
+	def __init__(self, *args, **kwargs):
 		
-		self._fa = fA
-		self._fb = fB
-		self._fc = fC
+		self._fa = kwargs.get('fA', 1.0)
+		self._fb = kwargs.get('fB', 1.0)
+		self._fc = kwargs.get('fC', 1.0)
+
 		self._points = []
 		
-		WavefrontOBJSceneObject.__init__(self,name)
+		super().__init__(*args, **kwargs)
 
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj.fA = json.get('fa')
+		obj.fB = json.get('fb')
+		obj.fC = json.get('fc')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['fa'] = self.fA
+		data['fb'] = self.fB
+		data['fc'] = self.fC
+		return data
 		
 	def updateMesh(self):
 		self._points = []
@@ -31,9 +46,9 @@ class EllipsoidObject(WavefrontOBJSceneObject):
 		tStep = np.pi / float(uiSlices);
 		sStep = np.pi / float(uiStacks);
 
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		for t in np.arange( -np.pi/2.0, (np.pi/2.0)+.0001, tStep):
 			for s in np.arange( -np.pi, np.pi+.0001, sStep):
@@ -95,9 +110,9 @@ class EllipsoidObject(WavefrontOBJSceneObject):
 		p0 = ray.points[0]
 		p1 = ray.points[1]
 
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		#Apply the inverse transformations of the Ellipse to the ray points
 		p0 = x0, y0, z0 = np.array( (np.matrix(p0)-T)*R.T+Tmass )[0]
@@ -129,9 +144,9 @@ class EllipsoidObject(WavefrontOBJSceneObject):
 
 
 	def pointIn(self, p):
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		#Apply the inverse transformations of the Ellipse to the point
 		x, y, z = np.array( (np.matrix(p)-T)*R.T+Tmass )[0]

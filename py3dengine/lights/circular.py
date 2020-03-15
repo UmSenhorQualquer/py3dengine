@@ -6,15 +6,13 @@ except:
 	print('No OpenGL libs')
 import math, numpy as np
 from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
-from .CircleObject import CircleObject
-from ..cameras.Ray import Ray
+from py3dengine.objects.circle import CircleObject
+from py3dengine.cameras.ray import Ray
 
 def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 
 class CircularLightObject(CircleObject):
-
-	_type = 'CircularLightObject'
 
 	def __init__(self, name='Untitled', fA=1.0, fB=1.0, focal_point=-1000, rays_step=1.0):
 

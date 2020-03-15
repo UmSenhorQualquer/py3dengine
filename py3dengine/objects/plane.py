@@ -1,3 +1,5 @@
+from py3dengine.objects.base_object import SceneObject
+
 try:
 	from OpenGL.GL import *
 	from OpenGL.GLUT import *
@@ -9,17 +11,13 @@ import math, numpy as np
 import cv2
 from py3dengine.objects.WavefrontOBJSceneObject import WavefrontOBJSceneObject
 
-def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
+class PlaneObject(SceneObject):
 
-class PlaneObject(WavefrontOBJSceneObject):
-
-	_type = 'PlaneObject'
-
-	def __init__(self, name='Untitled', width=1.0,height=1.0):
+	def __init__(self, *args, **kwargs):
 		
-		self._obj_width  = width
-		self._obj_height = height
+		self._obj_width  = kwargs.get('width', 1.0)
+		self._obj_height = kwargs.get('height', 1.0)
 		
 		self._mask_file = None
 		self._mask   	= None
@@ -27,8 +25,28 @@ class PlaneObject(WavefrontOBJSceneObject):
 		self._texture 	= None
 		self._compare_mask = None
 
-		WavefrontOBJSceneObject.__init__(self,name)
+		super().__init__(*args, **kwargs)
 
+	@classmethod
+	def from_json(cls, json):
+		obj = super().from_json(json)
+		obj._texture = json.get('texture')
+		obj._mask_file = json.get('mask-file')
+		obj._mask = json.get('mask')
+		obj._compare_mask = json.get('compare-mask')
+		obj._obj_width = json.get('width')
+		obj._obj_height = json.get('height')
+		return obj
+
+	def to_json(self, data={}):
+		data = super().to_json(data)
+		data['texture'] = self._texture
+		data['mask-file'] = self._mask_file
+		data['mask'] = self._mask
+		data['compare-mask'] = self._compare_mask
+		data['width'] = self.objwidth
+		data['height'] = self.objheight
+		return data
 
 	def __updateTexture(self):
 		if not isinstance(self._mask, (np.ndarray, np.generic) ): return
@@ -53,9 +71,9 @@ class PlaneObject(WavefrontOBJSceneObject):
 		p2 = p0[0]+self._obj_width, p0[1]+self._obj_height, p0[2]
 		p3 = p0[0]	  			  , p0[1]+self._obj_height, p0[2]
 
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		self._point0 = np.array( (np.matrix(p0)-Tmass)*R+T )[0]
 		self._point1 = np.array( (np.matrix(p1)-Tmass)*R+T )[0]
@@ -178,9 +196,9 @@ class PlaneObject(WavefrontOBJSceneObject):
 		
 		collision = x,y,z = x0+v0*t, y0+v1*t, z0+v2*t
 
-		Tmass 	= self.centerOfMassMatrix
-		T 		= self.positionMatrix
-		R 		= self.rotationMatrix
+		Tmass 	= self.center_of_mass_matrix
+		T 		= self.position_matrix
+		R 		= self.rotation_matrix
 		
 		p0, p1, p2, p3 = self.point0, self.point1, self.point2, self.point3
 

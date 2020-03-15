@@ -8,12 +8,12 @@ This functionality is quite useful for debugging proposes, where you can visuali
 using a remote server to visualize what is happening.
 
 To run the server, execute:
-python py3dengine/bin/RunSceneServer.py
+python py3dengine/bin/run_scene_server.py
 """
 
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJReader import WavefrontOBJReader
-from py3dengine.cameras.Ray import Ray
-from py3dengine.scenes.SceneClient import SceneClient
+from py3dengine.cameras.ray import Ray
+from py3dengine.scenes.scene_client import SceneClient
 
 w = WavefrontOBJReader('data/scene-example.obj')
 
