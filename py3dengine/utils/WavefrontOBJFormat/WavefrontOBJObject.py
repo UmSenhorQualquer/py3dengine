@@ -48,7 +48,7 @@ class WavefrontOBJObject(object):
 
 		out = []
 		out.append('o %s' % self.name)
-		if self.color!=None: out.append('usemtl %sMaterial' % self.name)
+		if self.color is not None: out.append('usemtl %sMaterial' % self.name)
 		
 		for vertice in self._vertices:
 			out.append('v %.9f %.9f %.9f' % tuple(vertice) )
@@ -74,7 +74,7 @@ class WavefrontOBJObject(object):
 
 
 	def exportMaterial(self):
-		if self.color==None: return ''
+		if self.color is None: return ''
 
 		out = []
 		out.append('newmtl %sMaterial' % self.name)

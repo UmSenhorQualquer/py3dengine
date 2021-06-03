@@ -16,14 +16,14 @@ def DistanceBetween(p0, p1):   return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1
 class CylinderObject(SceneObject):
 
 	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-
 		self._fa = kwargs.get('fA', 1.0)
 		self._fb = kwargs.get('fB', 1.0)
 		self._cylinderHeight = kwargs.get('height', 3.0)
-		
 
-		self.__calculatePlane()
+		super().__init__(*args, **kwargs)
+
+
+		self.updateMesh()
 
 	@classmethod
 	def from_json(cls, json):
@@ -37,9 +37,13 @@ class CylinderObject(SceneObject):
 		data['height'] = self.cylinderHeight
 		return data
 		
-	def __calculatePlane(self):
+	def updateMesh(self):
 		self._topPoints = []
 		self._bottomPoints = []
+
+		Tmass = self.center_of_mass_matrix
+		T = self.position_matrix
+		R = self.rotation_matrix
 
 		uiSlices = 10
 		fA, fB = self.fA, self.fB
@@ -47,8 +51,12 @@ class CylinderObject(SceneObject):
 		for rad in np.arange(0, np.pi*2, tStep): 
 			p0 = math.cos(rad)*fA, math.sin(rad)*fB, self._cylinderHeight/2
 			p1 = math.cos(rad)*fA, math.sin(rad)*fB, -self._cylinderHeight/2
-			self._topPoints.append( 	p0 )
-			self._bottomPoints.append( 	p1 )
+
+			p0 = np.array((np.matrix(p0) - Tmass) * R + T)[0]
+			p1 = np.array((np.matrix(p1) - Tmass) * R + T)[0]
+
+			self._topPoints.append(p0)
+			self._bottomPoints.append(p1)
 			
 		
 
@@ -56,17 +64,17 @@ class CylinderObject(SceneObject):
 	@property
 	def fA(self): return self._fa
 	@fA.setter
-	def fA(self, value): self._fa = value; self.__calculatePlane()
+	def fA(self, value): self._fa = value; self.updateMesh()
 
 	@property
 	def fB(self): return self._fb
 	@fB.setter
-	def fB(self, value): self._fb = value; self.__calculatePlane()
+	def fB(self, value): self._fb = value; self.updateMesh()
 
 	@property
 	def cylinderHeight(self): return self._cylinderHeight
 	@cylinderHeight.setter
-	def cylinderHeight(self, value): self._cylinderHeight = value; self.__calculatePlane()
+	def cylinderHeight(self, value): self._cylinderHeight = value; self.updateMesh()
 
 
 	"""
@@ -78,15 +86,22 @@ class CylinderObject(SceneObject):
 
 	def DrawGL(self):
 		glColor4f(*self.color)
+
+		Tmass = self.center_of_mass_matrix
+		T = self.position_matrix
+		R = self.rotation_matrix
+
+		center_top = np.array((np.matrix([0, 0, self._cylinderHeight/2]) - Tmass) * R + T)[0]
+		center_bottom = np.array((np.matrix([0, 0, -self._cylinderHeight / 2]) - Tmass) * R + T)[0]
 		
 		glBegin(GL_TRIANGLE_FAN);
-		glVertex3f(0,0,self._cylinderHeight/2)
+		glVertex3f(*center_top)
 		for i in range(len(self._topPoints)): glVertex3f(*self._topPoints[i])
 		glVertex3f(*self._topPoints[0])
 		glEnd();
 
 		glBegin(GL_TRIANGLE_FAN);
-		glVertex3f(0,0,-self._cylinderHeight/2)
+		glVertex3f(*center_bottom)
 		for i in range(len(self._bottomPoints)): glVertex3f(*self._bottomPoints[i])
 		glVertex3f(*self._bottomPoints[0])
 		glEnd();
@@ -96,6 +111,17 @@ class CylinderObject(SceneObject):
 			glVertex3f(*self._topPoints[i])
 			glVertex3f(*self._bottomPoints[i])
 		glVertex3f(*self._topPoints[0])
+		glVertex3f(*self._bottomPoints[0])
+		glEnd();
+
+		glColor4f(1.0, 1.0, 1.0, 1.0)
+		glBegin(GL_LINE_LOOP);
+		for i in range(len(self._topPoints)): glVertex3f(*self._topPoints[i])
+		glVertex3f(*self._topPoints[0])
+		glEnd();
+
+		glBegin(GL_LINE_LOOP);
+		for i in range(len(self._bottomPoints)): glVertex3f(*self._bottomPoints[i])
 		glVertex3f(*self._bottomPoints[0])
 		glEnd();
 

@@ -68,7 +68,7 @@ class VirtualCamera(object):
 		p2 = self.calcPoint( self.cameraWidth,0, 				 self.maxFocalLength )
 		p3 = self.calcPoint( self.cameraWidth,self.cameraHeight, self.maxFocalLength )
 		p4 = self.calcPoint( 0,self.cameraHeight, 				 self.maxFocalLength )
-		
+
 		glColor4f(*self._color)
 		if self._showFaces:
 			

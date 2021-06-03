@@ -7,8 +7,9 @@ try:
 except:
 	print('No OpenGL libs')
 
+from .WavefrontOBJSceneObject import WavefrontOBJSceneObject
 
-class SceneObject(object):
+class SceneObject(WavefrontOBJSceneObject):
 
 	def __init__(self, *args, **kwargs):
 

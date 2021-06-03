@@ -1,12 +1,7 @@
 import numpy as np
-from py3dengine.objects.base_object import SceneObject
 from py3dengine.utils.WavefrontOBJFormat.WavefrontOBJObject import WavefrontOBJObject
 
-class WavefrontOBJSceneObject(SceneObject):
-
-	def __init__(self, name='Untitled', color=None):
-		SceneObject.__init__(self,name, color=color)
-
+class WavefrontOBJSceneObject(object):
 
 	def after_load_scene_object(self):
 		"""

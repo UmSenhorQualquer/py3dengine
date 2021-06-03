@@ -62,7 +62,7 @@ class WavefrontOBJReader(object):
 				
 			if line.startswith('usemtl '):
 				material = line.strip('\n')[7:]
-				currentObject.color = self._materials[material]['Ka']
+				currentObject.color = self._materials[material]['Ka'] if material in self._materials else (1,1,1,1)
 
 			if line.startswith('v '):
 				values = list(map(float, line.replace(',','.').strip('\n')[2:].split(' ')[:3] ))

@@ -20,7 +20,7 @@ class BaseCamera(object):
 		self.cameraWidth    = 1280.0
 		self.cameraHeight    = 960.0
 		self.cameraMatrix 	  = np.matrix([[ 973.83868801,0.,667.4617181 ],[0.,973.55147583,542.32850545],[0.,0.,1.]])
-		self.cameraDistortion = np.array([ -3.55507046e-01, 1.76486050e-01, 1.65274132e-03, -1.38058855e-04, -5.18798911e-02] )
+		self.cameraDistortion = np.array([-3.55507046e-01, 1.76486050e-01, 1.65274132e-03, -1.38058855e-04, -5.18798911e-02])
 		self.name = name
 		self._rays = []
 
@@ -161,7 +161,7 @@ class BaseCamera(object):
 	@property
 	def cameraMatrix(self): return self._cameraMatrix
 	@cameraMatrix.setter
-	def cameraMatrix(self, value): 
+	def cameraMatrix(self, value):
 		if isinstance(value, tuple ):
 			value = list(value) 
 			self._cameraMatrix = np.matrix([value[0:3], value[3:6], value[6:9]])
